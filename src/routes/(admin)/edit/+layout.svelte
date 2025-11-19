@@ -8,6 +8,7 @@
     <nav>
         <Button text="Events" onClick={() => window.location.href = '/edit/events'} />
         <Button text="Teams" onClick={() => window.location.href = '/edit/teams'} />
+        
     </nav>
     {@render children()}
 </div>
