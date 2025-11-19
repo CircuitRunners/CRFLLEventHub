@@ -9,18 +9,15 @@
       title: string;
       description: string;
       type: MissionType;
-      max?: number; // Used for 'step' and 'precision'
-      state: number | boolean | null; // number for step/precision, boolean for yesNo
+      max?: number;
+      state: number | boolean | null;
       bonus?: {
         description: string;
         state: boolean;
       };
     }
   
-    // --- Initial Data ---
-  
-    // NOTE: I've initialized the state properties (state, bonus.state) here
-    // to ensure they are reactive and included in the dispatched data.
+    // NOTE: Mission Data remains the same as it correctly defines all missions.
     const missions: Mission[] = [
       // Toggle Missions (Yes/No)
       { id: 'M01', title: 'SURFACE BRUSHING', description: 'Small deposits are completely cleared, touching the mat.', type: 'yesNo', state: null },
@@ -46,16 +43,13 @@
   
     const dispatch = createEventDispatcher();
   
-    // Function to dispatch the entire mission array to the parent
     function updateState(): void {
       dispatch('updateState', missions);
     }
   
-    // Ensure state is updated on every click/change
-    // Svelte handles reactivity automatically, but we call updateState() to dispatch the change.
-    $: missions, updateState(); // This line ensures dispatch runs whenever 'missions' changes.
+    // Ensure state is updated and dispatched whenever 'missions' changes.
+    $: missions, updateState(); 
   
-    // Helper for generating step arrays
     function getSteps(max: number): number[] {
       return Array.from({ length: max + 1 }, (_, i) => i);
     }
@@ -77,10 +71,10 @@
       </div>
     </div>
   
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="columns-1 sm:columns-2 gap-4 space-y-4">
       {#each missions as mission (mission.id)}
         
-        <div class="p-3 bg-gray-800 rounded-lg shadow-md border-b border-gray-700">
+        <div class="p-3 bg-gray-800 rounded-lg shadow-md border-b border-gray-700 break-inside-avoid-column">
           
           <h3 class="text-lg font-bold text-yellow-400">{mission.id}: {mission.title}</h3>
           <p class="text-sm text-gray-400 mt-1">{mission.description}</p>
@@ -135,7 +129,6 @@
     <div class="sticky bottom-0 left-0 right-0 p-4 bg-gray-900 border-t border-gray-700 mt-6 flex justify-center">
       <button
         on:click={() => { 
-          // Simple manual reset for demonstration
           window.location.reload(); 
         }}
         class="p-3 bg-red-600 hover:bg-red-700 text-lg font-semibold rounded-lg shadow-md transition duration-150 ease-in-out active:scale-95"
@@ -144,12 +137,3 @@
       </button>
     </div>
   </div>
-  
-  <style>
-    /* Optional: Basic styles for a clean app look */
-    :global(body) {
-      margin: 0;
-      padding: 0;
-      background-color: #111827; /* Tailwind gray-900 */
-    }
-  </style>
