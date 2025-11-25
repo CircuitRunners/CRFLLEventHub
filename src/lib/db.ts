@@ -84,6 +84,11 @@ export const getTeam = async (id: number) => {
     return data
 }
 export const createTeam = async (team: any) => {
+    let teams = await getTeams();
+    if (teams?.map((team: any) => team.number).indexOf(team.number) != -1) {
+        console.log("Team with that number already exists")
+        return null
+    }
     const { data, error } = await supabase.from('Team').insert(team)
     if (error) {
         console.log(error)
@@ -100,8 +105,8 @@ export const updateTeam = async (team: any) => {
     return data
 }
 
-export const deleteTeam = async (id: number) => {
-    const { data, error } = await supabase.from('Team').delete().eq('id', id)
+export const deleteTeam = async (number: number) => {
+    const { data, error } = await supabase.from('Team').delete().eq('number', number)
     if (error) {
         console.log(error)
         return null

@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let type: "text" | "password"="text";
+    export let type: "text" | "password" | "number" = "text";
     export let width="w-[75%]";
     export let height="h-8";
     export let name="";

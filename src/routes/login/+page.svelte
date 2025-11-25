@@ -15,14 +15,14 @@
     <div class="flex flex-col w-1/2 left-1/4 justify-center">
         <AnimatedInputLabel
             name="Username"
-            labelbg="bg-slate-800"
+            labelbg="bg-black"
             bind:value={username}
             size="scale-110"
         ></AnimatedInputLabel>
         <AnimatedInputLabel
             name="Password"
             type={peek ? 'text' : 'password'}
-            labelbg="bg-slate-800"
+            labelbg="bg-black"
             bind:value={password}
             size="scale-110"
         ></AnimatedInputLabel>

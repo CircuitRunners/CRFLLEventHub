@@ -29,6 +29,13 @@ export const actions: Actions = {
                 sameSite: 'strict',
                 expires: new Date(8.64e15)
             });
+            event.cookies.set('admin', 'true', {
+                httpOnly: true,
+                path: '/',
+                secure: true,
+                sameSite: 'strict',
+                expires: new Date(8.64e15)
+            });
             return {
                 status: 200,
                 body: { message: "You are now logged in" },
