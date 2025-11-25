@@ -5,7 +5,7 @@
 
 </script>
 <div class="bg-black text-green-300 h-screen w-screen">
-    <nav>
+    <nav class="mb-2 flex justify-center gap-4">
         <Button text="Events" onClick={() => window.location.href = '/edit/events'} />
         <Button text="Teams" onClick={() => window.location.href = '/edit/teams'} />
         

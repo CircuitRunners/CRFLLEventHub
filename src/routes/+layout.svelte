@@ -9,9 +9,10 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
+<div class="bg-black text-green-300 h-screen w-screen">
+	<nav class="flex justify-center mb-2">
+		<Button text="Home" onClick={() => window.location.href = '/'} />
+	</nav>
+		{@render children()}
+</div>
 
-<nav>
-	<Button text="Home" onClick={() => window.location.href = '/'} />
-</nav>
-
-{@render children()}

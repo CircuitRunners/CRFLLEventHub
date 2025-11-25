@@ -14,9 +14,9 @@
     let newEvent = {
         season: "",
         type: "",
-        schedule_id: 0,
-        team_ids: [],
-        rankings_ids: [],
+        schedule: {},
+        team_numbers: [],
+        rankings: [],
     };
 </script>
 
@@ -33,7 +33,7 @@
         <Button text="Create Event" onClick={() => newEventDisplay = true} />
         {#if newEventDisplay}
             <h1 class="text-2xl font-bold">Create Event</h1>
-            <EventCard event={newEvent}></EventCard>
+            <EventCard event={newEvent} type="create"></EventCard>
         {/if}
     </div>
 </div>
