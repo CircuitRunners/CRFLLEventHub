@@ -179,7 +179,7 @@ export const createMatch = async (match: any) => {
         console.log(error)
         return null
     }
-    return data
+    return (await getMatches())?.find((a_match: any) => a_match.event_id === match.event_id && a_match.time === match.time)
 }
 export const updateMatch = async (match: any) => {
     const { data, error } = await supabase.from('Match').update(match).eq('id', match.id)

@@ -18,28 +18,28 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          rankings_ids: Json | null
-          schedule_id: number | null
+          rankings: Json | null
+          schedule: Json | null
           season: string | null
-          team_ids: Json | null
+          team_numbers: Json | null
           type: string | null
         }
         Insert: {
           created_at?: string
           id?: number
-          rankings_ids?: Json | null
-          schedule_id?: number | null
+          rankings?: Json | null
+          schedule?: Json | null
           season?: string | null
-          team_ids?: Json | null
+          team_numbers?: Json | null
           type?: string | null
         }
         Update: {
           created_at?: string
           id?: number
-          rankings_ids?: Json | null
-          schedule_id?: number | null
+          rankings?: Json | null
+          schedule?: Json | null
           season?: string | null
-          team_ids?: Json | null
+          team_numbers?: Json | null
           type?: string | null
         }
         Relationships: []
@@ -48,27 +48,37 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          score_id: number | null
+          table1: Json | null
+          table2: Json | null
+          table3: Json | null
+          table4: Json | null
+          table5: Json | null
+          table6: Json | null
+          time: string | null
         }
         Insert: {
           created_at?: string
           id?: number
-          score_id?: number | null
+          table1?: Json | null
+          table2?: Json | null
+          table3?: Json | null
+          table4?: Json | null
+          table5?: Json | null
+          table6?: Json | null
+          time?: string | null
         }
         Update: {
           created_at?: string
           id?: number
-          score_id?: number | null
+          table1?: Json | null
+          table2?: Json | null
+          table3?: Json | null
+          table4?: Json | null
+          table5?: Json | null
+          table6?: Json | null
+          time?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "Match_score_id_fkey"
-            columns: ["score_id"]
-            isOneToOne: false
-            referencedRelation: "Score"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       Score: {
         Row: {
@@ -142,18 +152,21 @@ export type Database = {
           id: number
           name: string | null
           number: number | null
+          password: string | null
         }
         Insert: {
           created_at?: string
           id?: number
           name?: string | null
           number?: number | null
+          password?: string | null
         }
         Update: {
           created_at?: string
           id?: number
           name?: string | null
           number?: number | null
+          password?: string | null
         }
         Relationships: []
       }

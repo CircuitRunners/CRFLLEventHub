@@ -52,14 +52,14 @@
             <div class="w-1/2 h-full">
                 <label for="season" class="text-center text-md">Select a Season</label>
                 <select name="Season" class="bg-slate-800  border rounded-lg p-2 w-full" bind:value={event.season}>
-                    <option value="test">Test Event</option>
-                    <option  value="25-26_Unearthed">Unearthed 2025-2026</option>
+                    <option value="Test">Test Event</option>
+                    <option  value="Unearthed 2025-2026">Unearthed 2025-2026</option>
                 </select>
                 <label for="type" class="text-center text-md">Select a Type</label>
                 <select name="Type" class="bg-slate-800  border rounded-lg p-2 w-full" bind:value={event.type}>
-                    <option value="test">Test Event</option>
-                    <option  value="regional">Regional</option>
-                    <option  value="super_regional">Super Regional</option>
+                    <option value="Test">Test Event</option>
+                    <option  value="Regional">Regional</option>
+                    <option  value="Super Regional">Super Regional</option>
                 </select>
             </div>
             <div class="w-1/2 h-full">
