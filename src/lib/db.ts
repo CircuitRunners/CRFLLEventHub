@@ -181,6 +181,19 @@ export const createMatch = async (match: any) => {
     }
     return (await getMatches())?.find((a_match: any) => a_match.event_id === match.event_id && a_match.time === match.time)
 }
+
+export const addMatchToEvent = async (match: any) => {
+    let data = await createMatch(match);
+    let event_data = await getEvent(match.event_id) as any;
+    if (event_data !== null) {
+        let event = event_data[0];
+        event.schedule!.matches = [...event.schedule!.matches, data!.id];
+        let other_data = await updateEvent(event);
+        console.log(other_data)
+    }
+    return data
+}
+
 export const updateMatch = async (match: any) => {
     const { data, error } = await supabase.from('Match').update(match).eq('id', match.id)
     if (error) {

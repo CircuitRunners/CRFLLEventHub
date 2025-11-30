@@ -1,13 +1,24 @@
 <script lang='ts'>
-	import { updateMatch } from './../../../../../lib/db.ts';
+	import { addMatchToEvent, getMatch, updateMatch } from '$lib/db.ts';
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
 	import EventCard from '$lib/components/EventCard.svelte';
 	import { createMatch, updateEvent } from '$lib/db.js';
+	import { onMount } from 'svelte';
 
     let {data} = $props()
     let event: any = data.event![0]
     console.log(event)
+    let matches: any[] = $state([]);
+    onMount(async () => {
+        for (let id of event.schedule.matches) {
+            let match = await getMatch(id);
+            if (match !== null) {
+                matches = [...matches, match[0]];
+            }
+        }
+        console.log(matches)
+    })
     let addMatchPopup = $state(false);
     let blankMatch = {
         table1: {
@@ -40,18 +51,16 @@
     let newMatch = $state(blankMatch);
     // console.log(newMatch)
     const createNewMatch = async () => {
-        console.log(newMatch)
-        let data = await createMatch(newMatch);
-        console.log(data)
-        event.schedule.matches = [...event.schedule.matches, data];
-        let other_data = await updateEvent(event);
-        console.log(other_data)
         addMatchPopup = false;
+        console.log(newMatch)
+        let data = await addMatchToEvent(newMatch);
+        console.log(data)
+        matches = [...matches, data];
         newMatch = blankMatch;
     }
     const saveMatch = async (match: any) => {
         console.log(match)
-        event.schedule.matches.map((old_match: any) => {
+        matches.map((old_match: any) => {
             if (old_match.id === match.id) {
                 return match;
             } else {
@@ -60,13 +69,10 @@
         })
         let data = await updateMatch(match);
         console.log(data)
-        let other_data = await updateEvent(event);
-        console.log(other_data)
     }
-    console.log(event.schedule.matches)
 </script>
 
-<div class="w-3/4 ml-[12.5%] h-screen flex flex-col items-center relative overflow-scroll pb-10 ">
+<div class="w-3/4 ml-[12.5%] h-[90%] flex flex-col items-center relative ">
     <div class="{addMatchPopup ? "blur-2xl" : ""}">
         <h1 class="text-center text-2xl font-bold">Event {event.type} | {event.season}</h1>
         
@@ -74,8 +80,9 @@
     </div>
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <div class="w-full h-fit flex flex-col items-center {addMatchPopup ? "blur-2xl" : ""} justify-center">
-        <h1 class="text-center text-xl font-bold mb-[2%]">{event.schedule ? "Update" : "Create" } Schedule</h1> 
-        {#each event.schedule.matches || [] as match, index}
+        <Button text="Live Scoring" classContent="mt-2" onClick={() => {goto(`/edit/events/${event.id}/scoring`)}}></Button> 
+        <h1 class="text-center text-2xl font-bold mb-[2%]">{event.schedule ? "Update" : "Create" } Schedule</h1> 
+        {#each matches as match, index}
         <div class="w-3/4 h-full top-[5%] left-1/8 bg-slate-800 flex flex-col items-center border rounded-lg mb-4">
             <h1 class="text-2xl text-center font-bold pb-4">Match {index+ 1}</h1>
             <div class="flex flex-row w-3/4 justify-start mb-2 gap-1">
