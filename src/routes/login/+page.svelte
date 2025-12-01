@@ -75,6 +75,7 @@
             <input type="password" bind:value={password} class="hidden" name="password" />
             <button
                 type="submit"
+                on:click={() => {console.log("submitted")}}
                 class="border bg-transparent w-[75%] relative left-[12.5%] pl-4 pr-4 text-current rounded-md mt-[4%] scale-110 mt[6%]"
                 >Log In</button
             >
