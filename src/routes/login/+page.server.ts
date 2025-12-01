@@ -2,7 +2,7 @@ import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async (event) =>{
-    if (event.cookies.get('loggedIn') === 'true') {
+    if (event.cookies.get('team') === '-1') {
         return { status: 200, body: { message: "You are logged in" } };
     }
     return { status: 401, body: { message: "You are not logged in" } };
@@ -22,7 +22,7 @@ export const actions: Actions = {
 
         if (username === 'admin' && password === 'admin') {
             console.log('Logged in');
-            event.cookies.set('loggedIn', 'true', {
+            event.cookies.set('team', '-1', {
                 httpOnly: true,
                 path: '/',
                 secure: true,
