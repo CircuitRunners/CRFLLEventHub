@@ -1,5 +1,6 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { goto } from "$app/navigation";
 
 export const load: PageServerLoad = async (event) =>{
     if (event.cookies.get('team') === '-1') {
@@ -36,6 +37,7 @@ export const actions: Actions = {
                 sameSite: 'strict',
                 expires: new Date(8.64e15)
             });
+            redirect(303, '/edit');
             return {
                 status: 200,
                 body: { message: "You are now logged in" },
