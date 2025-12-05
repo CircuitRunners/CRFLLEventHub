@@ -2,6 +2,18 @@
     import Button from '$lib/components/Button.svelte'
     import { goto } from '$app/navigation'
 
+    import { getTeams } from '$lib/db';
+
+    let teams = [];
+
+
+    (async () => {
+        let teams = await getTeams();
+        console.log(teams);      
+        let num = (teams[0].number);
+        let numpass = (teams[0].password);
+    })();
+
     let username: string
     let password: string
 
