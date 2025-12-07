@@ -47,6 +47,7 @@ export type Database = {
       Match: {
         Row: {
           created_at: string
+          event_id: number | null
           id: number
           table1: Json | null
           table2: Json | null
@@ -58,6 +59,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          event_id?: number | null
           id?: number
           table1?: Json | null
           table2?: Json | null
@@ -69,6 +71,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          event_id?: number | null
           id?: number
           table1?: Json | null
           table2?: Json | null
@@ -84,7 +87,9 @@ export type Database = {
         Row: {
           created_at: string
           equipment_inspection: boolean | null
+          gracious_professionalism: number | null
           id: number
+          match_id: number | null
           mission01: Json | null
           mission02: Json | null
           mission03: Json | null
@@ -100,12 +105,16 @@ export type Database = {
           mission13: Json | null
           mission14: Json | null
           mission15: Json | null
+          precision_tokens: number | null
+          table: number | null
           total: number | null
         }
         Insert: {
           created_at?: string
           equipment_inspection?: boolean | null
+          gracious_professionalism?: number | null
           id?: number
+          match_id?: number | null
           mission01?: Json | null
           mission02?: Json | null
           mission03?: Json | null
@@ -121,12 +130,16 @@ export type Database = {
           mission13?: Json | null
           mission14?: Json | null
           mission15?: Json | null
+          precision_tokens?: number | null
+          table?: number | null
           total?: number | null
         }
         Update: {
           created_at?: string
           equipment_inspection?: boolean | null
+          gracious_professionalism?: number | null
           id?: number
+          match_id?: number | null
           mission01?: Json | null
           mission02?: Json | null
           mission03?: Json | null
@@ -142,6 +155,8 @@ export type Database = {
           mission13?: Json | null
           mission14?: Json | null
           mission15?: Json | null
+          precision_tokens?: number | null
+          table?: number | null
           total?: number | null
         }
         Relationships: []

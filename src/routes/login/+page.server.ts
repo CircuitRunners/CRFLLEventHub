@@ -28,7 +28,7 @@ export const actions: Actions = {
         const teams = await getTeams();
 
         // find the team that matches the login info
-        const matched = teams.find(
+        const matched = teams!.find(
             (t) => String(t.number) === username && t.password === password
         );
         

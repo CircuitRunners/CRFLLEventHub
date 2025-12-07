@@ -137,7 +137,7 @@ export const createScore = async (score: any) => {
         console.log(error)
         return null
     }
-    return data
+    return (await getScores())?.find((a_score: any) => a_score.match_id === score.match_id && a_score.table === score.table)
 }
 export const updateScore = async (score: any) => {
     const { data, error } = await supabase.from('Score').update(score).eq('id', score.id)

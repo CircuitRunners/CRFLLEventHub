@@ -23,27 +23,27 @@
     let blankMatch = {
         table1: {
             team: -1,
-            score: {},
+            score: -1,
         },
         table2: {
             team: -1,
-            score: {},
+            score: -1,
         },
         table3: {
             team: -1,
-            score: {},
+            score: -1,
         },
         table4: {
             team: -1,
-            score: {},
+            score: -1,
         },
         table5: {
             team: -1,
-            score: {},
+            score: -1,
         },
         table6: {
             team: -1,
-            score: {},
+            score: -1,
         },
         time: "",
         event_id: event.id,
@@ -73,6 +73,7 @@
 </script>
 
 <div class="w-3/4 ml-[12.5%] h-[90%] flex flex-col items-center relative ">
+    <Button text="Live Scoring" classContent="my-[2%] scale-[150%]" onClick={() => {goto(`/edit/events/${event.id}/scoring`)}}></Button> 
     <div class="{addMatchPopup ? "blur-2xl" : ""}">
         <h1 class="text-center text-2xl font-bold">Event {event.type} | {event.season}</h1>
         
@@ -80,7 +81,6 @@
     </div>
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <div class="w-full h-fit flex flex-col items-center {addMatchPopup ? "blur-2xl" : ""} justify-center">
-        <Button text="Live Scoring" classContent="mt-2" onClick={() => {goto(`/edit/events/${event.id}/scoring`)}}></Button> 
         <h1 class="text-center text-2xl font-bold mb-[2%]">{event.schedule ? "Update" : "Create" } Schedule</h1> 
         {#each matches as match, index}
         <div class="w-3/4 h-full top-[5%] left-1/8 bg-slate-800 flex flex-col items-center border rounded-lg mb-4">
