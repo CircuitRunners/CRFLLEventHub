@@ -1,9 +1,30 @@
 <script lang="ts">
 	import type { Score } from "$lib";
+	import { createScore, updateMatch, updateScore } from "$lib/db";
     import { blankScore } from "$lib/index";
+	import AsyncButton from "./AsyncButton.svelte";
 	import Button from "./Button.svelte";
     export let score: Score = blankScore;
-    export let saveScore = async(score: Score) => {};
+    export let match: any;
+    const saveScore = async () => {
+        console.log(score)
+        if(score.id) {
+            console.log("updating")
+            let data = await updateScore(score);
+            console.log(data)
+        } else {
+            console.log("creating")
+            // console.log(score)
+            let data = await createScore(score);
+            console.log(data)
+            score = data as unknown as Score;
+            console.log(score.id)
+            match.table.score = score.id;
+            // console.log(table)
+            console.log(match)
+            await updateMatch(match);
+        }
+    };
 
     const calculate_total = (score: Score) => {
         let total = 0;
@@ -452,5 +473,5 @@
             <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.gracious_professionalism === 4 ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 4}>Exceeds</button>
         </div>
     </div>
-    <Button text="Save Score" classContent="mt-2" onClick={() => saveScore(score)}></Button>
+    <AsyncButton text="Save Score" classContent="mt-2" on:click={saveScore}></AsyncButton>
 </div>

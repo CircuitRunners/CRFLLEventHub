@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 	import { getMatch } from '$lib/db.js';
 	import { onMount } from 'svelte';
 
@@ -7,8 +7,9 @@
     
     let teamname = data.teamName;
     let teamnum = data.teamNum;
-    let events = data.event;
-    let match = data.matches;
+    let event = data.live_event;
+    let matches = data.matches;
+    console.log(matches)
     let allScores = data.scores
 
     // console.log(match);
@@ -18,12 +19,12 @@
 
     let teamGames = []; // [round number, table number, match id]
     let i = 0;
-    if (match == null) {
+    if (matches == null) {
         console.log("No matches found");
     }
     else{
         
-        for (let m of match) {
+        for (let m of (matches as any))  {
             i += 1;
  
             if (m.table1.team == teamnum) {               
@@ -58,13 +59,12 @@
 
     
     
-    function scoreCalc(id, table) {
-        onMount(async () => {
+    async function scoreCalc(id: number, table:number) {
         
-            let match = await getMatch(id);});
-            let t = "table" + table;
-            return match?.[t]?.score;
         
+        let a_match = await getMatch(id);
+        let t: string = "table" + table;
+        return a_match![t]!.score;
         
     }
     function getTeamScores(teamGames, allScores) {
@@ -84,7 +84,13 @@
     
     const teamScores = getTeamScores(teamGames, allScores);
     console.log(teamScores);
-    const onlyTotals = teamScores.map(x => x.score.total);
+    const onlyTotals = teamScores.map((x) => {
+        if (x.score) {
+            return x.score.total;
+        } else {
+            return 0
+        }
+    });
 
 
 
@@ -98,7 +104,7 @@
         Hello {teamname}!
     </h2>
     <p>
-        Event Number: {events?.id}
+        Event {event.season} | {event.type}
     </p>
     <h3>
         Your Matches:
@@ -108,7 +114,7 @@
     {:else}
         <ul>
             {#each teamGames as game}
-                <li>Round {game[0]} - Table {game[1]} (Match Score: {onlyTotals[0]})</li>
+                <li>Round {game[0]} - Table {game[1]} (Score: {onlyTotals[0]})</li>
             {/each}
         </ul>
     {/if}

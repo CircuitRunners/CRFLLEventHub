@@ -24,23 +24,7 @@
         }
     })
 
-    const saveScore = async (score: Score) => {
-        console.log(score)
-        if(score.id) {
-            await updateScore(score);
-        } else {
-            console.log(score)
-            let data = await createScore(score);
-            console.log(data)
-            score = data as unknown as Score;
-            console.log(score)
-            table.score = score.id;
-            console.log(table)
-            console.log(match)
-            await updateMatch(match);
-        }
-    }
 </script>
 <div class="w-full h-full pb-[5%]">
-    <ScoreBreakdown {score} {saveScore} />
+    <ScoreBreakdown {score} {match}/>
 </div>
