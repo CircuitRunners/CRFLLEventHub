@@ -14,6 +14,7 @@
         },
         team_numbers: [],
         rankings: [],
+        live: false
     };
     let events: any[] = [newEvent];
 
@@ -31,6 +32,7 @@
             schedule: {matches: [], judging: []},
             team_numbers: [],
             rankings: [],
+            live: false
         };
     }
 </script>

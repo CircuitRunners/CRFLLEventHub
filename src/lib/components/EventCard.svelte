@@ -61,6 +61,11 @@
                     <option  value="Regional">Regional</option>
                     <option  value="Super Regional">Super Regional</option>
                 </select>
+                <label for="live" class="text-center text-md">Is the event live?</label>
+                <select name="live" class="bg-slate-800  border rounded-lg p-2 w-full" bind:value={event.live}>
+                    <option value={true}>Yes</option>
+                    <option  value={false}>No</option>
+                </select>
             </div>
             <div class="w-1/2 h-full">
                 <h1 class="text-center text-2xl font-bold">Teams</h1>
