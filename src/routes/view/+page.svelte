@@ -9,14 +9,13 @@
     let teamnum = data.teamNum;
     let events = data.event;
     let match = data.matches;
+    let allScores = data.scores
 
     // console.log(match);
     // console.log(events);
     // console.log("Team Number: " + teamnum);
 //ok so the above code is just like not even working like pu lling data wrong
-    // console.log(match[0])
-    console.log(teamnum);
-    console.log(match);
+
     let teamGames = []; // [round number, table number, match id]
     let i = 0;
     if (match == null) {
@@ -56,6 +55,9 @@
         }
         console.log(teamGames);
     }
+
+    
+    
     function scoreCalc(id, table) {
         onMount(async () => {
         
@@ -65,6 +67,27 @@
         
         
     }
+    function getTeamScores(teamGames, allScores) {
+    return teamGames.map(([round, table, matchId]) => {
+        const score = allScores.find(
+            s => s.table === table && s.match_id === matchId
+        );
+
+        return {
+            round,
+            table,
+            matchId,
+            score: score ?? null
+        };
+    });
+}   
+    
+    const teamScores = getTeamScores(teamGames, allScores);
+    console.log(teamScores);
+    const onlyTotals = teamScores.map(x => x.score.total);
+
+
+
     
 
     
@@ -85,10 +108,12 @@
     {:else}
         <ul>
             {#each teamGames as game}
-                <li>Round {game[0]} - Table {game[1]} (Match Score: {scoreCalc(game[0], game[1])})</li>
+                <li>Round {game[0]} - Table {game[1]} (Match Score: {onlyTotals[0]})</li>
             {/each}
         </ul>
     {/if}
+
+    
 
     
 </div>

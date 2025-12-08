@@ -1,4 +1,4 @@
-import { getTeams } from "$lib/db";
+import { getScore, getScores, getTeams } from "$lib/db";
 import type { LayoutServerLoad } from "./$types";
 import type { PageServerLoad } from "./$types";
 import { getEvents } from "$lib/db";
@@ -19,6 +19,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
     // console.log(events);
     const matches = await getMatches();
     // console.log(matches);
+    const scores = await getScores();
+   
 
     
 
@@ -27,7 +29,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
         teamName: team?.name ?? null,
         teamNum: team ? team.number : null,
         event: events ? events[0] : null,
-        matches: matches ? matches : null
+        matches: matches ? matches : null,
+        scores: scores ? scores : null
         
     };
 };
