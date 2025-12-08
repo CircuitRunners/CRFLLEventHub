@@ -11,7 +11,7 @@
     console.log(event)
     let matches: any[] = $state([]);
     onMount(async () => {
-        for (let id of event.schedule.matches) {
+        for (let id of event.schedule.matches || []) {
             let match = await getMatch(id);
             if (match !== null) {
                 matches = [...matches, match[0]];

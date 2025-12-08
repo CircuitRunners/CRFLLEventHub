@@ -58,6 +58,12 @@ export const updateEvent = async (event: any) => {
     return data
 }
 export const deleteEvent = async (id: number) => {
+    let event = (await getEvent(id))![0] as any;
+    let schedule = event.schedule;
+    let matches = schedule.matches;
+    for (let match of matches) {
+        deleteMatch(match);
+    }
     const { data, error } = await supabase.from('Event').delete().eq('id', id)
     if (error) {
         console.log(error)
@@ -204,6 +210,19 @@ export const updateMatch = async (match: any) => {
 }
 
 export const deleteMatch = async (id: number) => {
+    let match = (await getMatch(id))![0] as any;
+    let score1_id = match.table1.score;
+    let score2_id = match.table2.score;
+    let score3_id = match.table3.score;
+    let score4_id = match.table4.score;
+    let score5_id = match.table5.score;
+    let score6_id = match.table6.score;
+    deleteScore(score1_id);
+    deleteScore(score2_id);
+    deleteScore(score3_id);
+    deleteScore(score4_id);
+    deleteScore(score5_id);
+    deleteScore(score6_id);
     const { data, error } = await supabase.from('Match').delete().eq('id', id)
     if (error) {
         console.log(error)

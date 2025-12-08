@@ -8,7 +8,10 @@
     let newEvent = {
         season: "",
         type: "",
-        schedule: {},
+        schedule: {
+            matches: [],
+            judging: []
+        },
         team_numbers: [],
         rankings: [],
     };
@@ -25,7 +28,7 @@
         newEvent = {
             season: "",
             type: "",
-            schedule: {},
+            schedule: {matches: [], judging: []},
             team_numbers: [],
             rankings: [],
         };
