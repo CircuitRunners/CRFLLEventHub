@@ -11,6 +11,7 @@
     let matches = data.matches;
     console.log(matches)
     let allScores = data.scores
+    console.log(allScores)
 
     // console.log(match);
     // console.log(events);
@@ -81,6 +82,7 @@
         };
     });
 }   
+
     
     const teamScores = getTeamScores(teamGames, allScores);
     console.log(teamScores);
@@ -91,6 +93,35 @@
             return 0
         }
     });
+
+    let matchIds = teamGames.map((x) => x[2]);
+    console.log("Match Ids:");
+    console.log(matchIds);
+    let scoresForTeamMatches = allScores.filter((score) => matchIds.includes(score.match_id));
+    console.log("Scores for Team Matches:");
+    console.log(scoresForTeamMatches);
+    let tableIds = teamGames.map((x) => x[1]);
+    console.log("Table Ids:");
+    console.log(tableIds);
+
+    
+
+    function findScore(id, table){
+        let scoring = [];
+        for (let score of allScores){
+            for (let tableId of tableIds){
+                for (let matchId of matchIds){
+                    if (score.table == tableId && score.match_id == matchId){
+                         scoring.push(score.total);
+                    }
+                }
+            }
+            
+        }
+        return scoring;
+    }
+
+    let scoring = findScore(matchIds, tableIds);
 
 
 
@@ -119,7 +150,20 @@
         </ul>
     {/if}
 
+    {#if scoring.length > 0}
+        <h3>Your Scores:</h3>
+        <ul>
+            {#each scoring as score, index}
+                <li>Match {index + 1}: {score}</li>
+            {/each}
+        </ul>
+    {/if}
+
+
+    
     
 
     
-</div>
+
+    
+</div>  
