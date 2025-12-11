@@ -4,6 +4,7 @@ import { getEvents } from "$lib/db";
 import { getMatch } from "$lib/db";
 import { getMatches } from "$lib/db";
 
+
 export const load: PageServerLoad = async ({ cookies }) => {
     const teamNumber = cookies.get("team");
     
@@ -11,9 +12,9 @@ export const load: PageServerLoad = async ({ cookies }) => {
         return { teamName: null };
     }
     const teams = await getTeams();
-    // console.log(teams);
+    console.log(teams);
     const team = teams!.find(t => String(t.number) === teamNumber);
-    // console.log(team)
+    console.log(team)
     const live_event = (await getEvents())?.filter((e: any) => e.live)[0] as any;
     // console.log(live_event);
     let matches = []
