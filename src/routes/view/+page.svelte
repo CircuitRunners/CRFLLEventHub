@@ -220,15 +220,18 @@
         </ul>
     {/if}
 
-   
+    
     {#if scoring.length == 0}
         <p>No scores found for your matches.</p>
     {:else}
         <ul>
             {#each scoring as sc, index}
                 
-                
-                <li>
+            <details>
+                <summary> Match: {index+1} | Total score: {scoring[index].total}</summary>
+                <!-- <summary class="cursor-pointer hover:underline">
+                    Match {teamGames[index][0]} - Table {teamGames[index][1]} (Score: {scoring[index].total})
+                </summary> -->
                 <div class="w-full h-fit flex flex-col items-center rounded-2xl">
                     
                         <h1 class="text-3xl font-extrabold h-fit">Match {index+1}</h1>
@@ -598,7 +601,7 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </details>
             {/each}
 
 
