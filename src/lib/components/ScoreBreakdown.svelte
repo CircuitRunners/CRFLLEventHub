@@ -106,16 +106,16 @@
     $: calculate_total(score)
 </script>
 
-<div class="w-full h-fit flex flex-col items-center rounded-2xl">
-    <div class="fixed w-full flex flex-col items-center z-10 bg-black">
-        <h1 class="text-3xl font-extrabold h-fit">FLL UNEARTHED SCORER</h1>
+<div class="w-full h-fit flex flex-col items-center relative rounded-2xl">
+    <div class="w-full flex flex-col items-center z-10 bg-black {isEditing ? "fixed" : "block bg-transparent"}">
+        <h1 class="text-3xl font-extrabold h-fit">Score Breakdown</h1>
         <div class="flex items-center gap-4 p-2">
             <div class="p-2">
                 <p class="text-2xl font-bold">Total Score: <span class=" px-4 py-2 border border-slate-600">{score.total}</span> </p>  
             </div>
         </div>
     </div>
-    <div class=" mt-[10%] w-3/4 h-fit p-[2%] flex flex-col bg-slate-800 justify-center items-center border rounded-2xl" id="equipment_inspection">
+    <div class="  {isEditing ? "mt-[10%]" : "mt-[4%]"} w-3/4 h-fit p-[2%] flex flex-col bg-slate-800 justify-center items-center border rounded-2xl" id="equipment_inspection"> 
         <h1 class="text-2xl font-bold">
             Equipment Inspection
         </h1>
@@ -460,7 +460,7 @@
             {/each}
         </div>
     </div>
-    <div class="w-3/4 h-fit p-[2%] flex flex-col bg-slate-800 mt-4 justify-center items-center border rounded-2xl" id="gracious_professionalism">
+    <div class="w-3/4 h-fit {isEditing ? "" : "hidden"} p-[2%] flex flex-col bg-slate-800 mt-4 justify-center items-center border rounded-2xl" id="gracious_professionalism">
         <h1 class="text-2xl font-bold">
             Gracious Professionalism
         </h1>
@@ -474,5 +474,5 @@
             <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.gracious_professionalism === 4 ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 4}>Exceeds</button>
         </div>
     </div>
-    <AsyncButton text="Save Score" classContent="mt-2" onClick={saveScore}></AsyncButton>
+    <AsyncButton text="Save Score" classContent="mt-2 {isEditing ? "" : "hidden"}" onClick={saveScore}></AsyncButton>
 </div>

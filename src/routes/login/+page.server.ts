@@ -6,7 +6,13 @@ import { goto } from "$app/navigation";
 
 
 export const load: PageServerLoad = async (event) =>{
-    if (event.cookies.get('team') === '-1') {
+    if (event.cookies.get('team')) {
+        if(event.cookies.get('admin') === 'true') {
+            redirect(303, '/edit');
+            return { status: 200, body: { message: "You are logged in" } };
+        } else {
+            redirect(303, '/view');
+        }
         return { status: 200, body: { message: "You are logged in" } };
     }
     return { status: 401, body: { message: "You are not logged in" } };
