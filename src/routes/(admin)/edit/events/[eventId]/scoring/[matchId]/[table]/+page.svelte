@@ -26,5 +26,5 @@
 
 </script>
 <div class="w-full h-full pb-[5%]">
-    <ScoreBreakdown {score} {match}/>
+    <ScoreBreakdown {score} {match} isEditing={true}/>
 </div>

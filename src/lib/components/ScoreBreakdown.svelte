@@ -6,6 +6,7 @@
 	import Button from "./Button.svelte";
     export let score: Score = blankScore;
     export let match: any;
+    export let isEditing: boolean = true;
     const saveScore = async () => {
         console.log(score)
         if(score.id) {
@@ -123,8 +124,8 @@
             </p>
         </div>
         <div class="flex flex-row pt-4 justify-center items-center gap-2">
-        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.equipment_inspection === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.equipment_inspection = false}>No</button>
-            <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.equipment_inspection === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.equipment_inspection = true}>Yes</button>
+            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.equipment_inspection === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.equipment_inspection = false}>No</button>
+            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.equipment_inspection === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.equipment_inspection = true}>Yes</button>
         </div>
     </div>
     <div class="w-[80%] h-fit p-[2%] flex flex-row bg-slate-800 mt-4 justify-center items-center border rounded-2xl">
@@ -140,7 +141,7 @@
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
                         {#each [0, 1, 2] as i}
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission01!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part1 = i}>{i}</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission01!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part1 = i}>{i}</button>
                         {/each}
                     </div>
                 </div>
@@ -151,8 +152,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission01!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission01!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part2 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission01!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part2 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission01!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
@@ -167,7 +168,7 @@
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
                         {#each [0, 1, 2, 3] as i}
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission02!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission02!.part1 = i}>{i}</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission02!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission02!.part1 = i}>{i}</button>
                         {/each}
                     </div>
                 </div>
@@ -182,8 +183,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission03!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => {score.mission03!.part1 = false; score.mission03!.part2 = false}}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission03!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission03!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission03!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => {score.mission03!.part1 = false; score.mission03!.part2 = false}}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission03!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission03!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -193,10 +194,10 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white disabled:bg-slate-900 disabled:text-slate-600  {score.mission03!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" disabled={!score.mission03!.part1} on:click={() => score.mission03!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white disabled:bg-slate-900 disabled:text-slate-600  {score.mission03!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" disabled={!score.mission03!.part1} on:click={() => score.mission03!.part2 = true}>Yes</button>
+                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""}  {score.mission03!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" disabled={!(isEditing && score.mission03!.part1)} on:click={() => score.mission03!.part2 = false}>No</button>
+                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""}  {score.mission03!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" disabled={!(isEditing && score.mission03!.part1)} on:click={() => score.mission03!.part2 = true}>Yes</button>
                     </div>
-                </div>
+            </div>
             </div>
             <div class="" id="mission04">
                 <h1 class="text-2xl font-bold">
@@ -208,8 +209,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission04!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission04!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission04!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission04!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -219,8 +220,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission04!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission04!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part2 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission04!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part2 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission04!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
@@ -234,8 +235,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission05!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission05!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission05!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission05!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission05!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission05!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission05!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission05!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -251,7 +252,7 @@
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
                         {#each [0, 1, 2, 3] as i}
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission06!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission06!.part1 = i}>{i}</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission06!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission06!.part1 = i}>{i}</button>
                         {/each}
                     </div>
                 </div>
@@ -266,8 +267,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission07!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission07!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission07!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission07!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission07!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission07!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission07!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission07!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -283,7 +284,7 @@
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
                         {#each [0, 1, 2, 3] as i}
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission08!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission08!.part1 = i}>{i}</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission08!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission08!.part1 = i}>{i}</button>
                         {/each}
                     </div>
                 </div>
@@ -300,8 +301,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission09!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission09!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission09!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission09!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -311,8 +312,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission09!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission09!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part2 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission09!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part2 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission09!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
@@ -326,8 +327,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission10!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission10!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission10!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission10!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -337,8 +338,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission10!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission10!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part2 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission10!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part2 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission10!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
@@ -352,8 +353,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission11!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => {score.mission11!.part1 = false; score.mission11!.part2 = false} }>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission11!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission11!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission11!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => {score.mission11!.part1 = false; score.mission11!.part2 = false} }>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission11!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission11!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -363,8 +364,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission11!.part2 === false ? "bg-red-500 text-white" : ""} disabled:bg-slate-900 disabled:text-slate-600 transition-colors" disabled={!score.mission11!.part1} on:click={() => score.mission11!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission11!.part2 === true ? "bg-green-500 text-white" : ""} disabled:bg-slate-900 disabled:text-slate-600 transition-colors" disabled={!score.mission11!.part1} on:click={() => score.mission11!.part2 = true}>Yes</button>
+                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission11!.part2 === false ? "bg-red-500 text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""} transition-colors" disabled={!(isEditing && score.mission11!.part1)} on:click={() => score.mission11!.part2 = false}>No</button>
+                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission11!.part2 === true ? "bg-green-500 text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""} transition-colors" disabled={!(isEditing && score.mission11!.part1)} on:click={() => score.mission11!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
@@ -378,8 +379,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission12!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission12!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission12!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission12!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -389,8 +390,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission12!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission12!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part2 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission12!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part2 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission12!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
@@ -404,8 +405,8 @@
                         </p>
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.mission13!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission13!.part1 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission13!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission13!.part1 = true}>Yes</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission13!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission13!.part1 = false}>No</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission13!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission13!.part1 = true}>Yes</button>
                     
                     </div>
                 </div>
@@ -422,7 +423,7 @@
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
                         {#each [0, 1, 2, 3, 4, 5, 6, 7] as i}
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission14!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission14!.part1 = i}>{i}</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission14!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission14!.part1 = i}>{i}</button>
                         {/each}
                     </div>
                 </div>
@@ -438,7 +439,7 @@
                     </div>
                     <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
                         {#each [0, 1, 2, 3] as i}
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.mission15!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission15!.part1 = i}>{i}</button>
+                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission15!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission15!.part1 = i}>{i}</button>
                         {/each}
                     </div>
                 </div>
@@ -455,7 +456,7 @@
         </div>
         <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
             {#each [0, 1, 2, 3, 4, 5, 6] as i}
-            <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.precision_tokens === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.precision_tokens = i}>{i}</button>
+            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.precision_tokens === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.precision_tokens = i}>{i}</button>
             {/each}
         </div>
     </div>
@@ -468,10 +469,10 @@
             </p>
         </div>
         <div class="flex flex-row pt-4 justify-center items-center gap-2">
-            <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-red-500 hover:text-white {score.gracious_professionalism === 2 ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 2}>Developing</button>
-            <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-orange-500 hover:text-white {score.gracious_professionalism === 3 ? "bg-orange-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 3}>Accomplished</button>
-            <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-green-500 hover:text-white {score.gracious_professionalism === 4 ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 4}>Exceeds</button>
+            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.gracious_professionalism === 2 ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 2}>Developing</button>
+            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-orange-500 hover:text-white {score.gracious_professionalism === 3 ? "bg-orange-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 3}>Accomplished</button>
+            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.gracious_professionalism === 4 ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 4}>Exceeds</button>
         </div>
     </div>
-    <AsyncButton text="Save Score" classContent="mt-2" on:click={saveScore}></AsyncButton>
+    <AsyncButton text="Save Score" classContent="mt-2" onClick={saveScore}></AsyncButton>
 </div>
