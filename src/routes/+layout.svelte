@@ -14,6 +14,7 @@
 <div class="bg-black text-green-300 h-screen w-screen overflow-auto">
 	<nav class="flex justify-center my-2 gap-4">
 		<Button text="View" onClick={() => window.location.href = '/view'} />
+		<Button text="Rankings" onClick={() => window.location.href = '/rankings'} />
 		{#if data.admin === "true"}
 			<Button text="Edit" onClick={() => window.location.href = '/edit/events'} />
 		{/if}
