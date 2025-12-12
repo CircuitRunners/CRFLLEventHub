@@ -3,9 +3,14 @@ import type { PageServerLoad } from "./$types";
 import { getEvents } from "$lib/db";
 import { getMatch } from "$lib/db";
 import { getMatches } from "$lib/db";
+import { redirect } from "@sveltejs/kit";
 
 
 export const load: PageServerLoad = async ({ cookies }) => {
+    if(!cookies.get('team')) {
+        redirect(303, '/login');
+    }
+
     const teamNumber = cookies.get("team");
     
     if (!teamNumber) {

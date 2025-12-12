@@ -24,7 +24,7 @@
 </script>
 
 <div class="flex justify-center">
-    <div class="flex flex-col w-1/2 left-1/4 justify-center">
+    <div class="flex flex-col w-1/2 relative justify-center">
         <AnimatedInputLabel
             name="Username"
             labelbg="bg-black"
@@ -39,7 +39,7 @@
             size="scale-110"
         ></AnimatedInputLabel>
         <button
-            class="absolute right-[30%] top-[15.5%]"
+            class="absolute right-[10%] top-[63%] cursor-pointer"
             on:click={() => {
                 if (!peek) peek = true;
                 else peek = false;
@@ -88,7 +88,7 @@
             <button
                 type="submit"
                 on:click={() => {console.log("submitted")}}
-                class="border bg-transparent w-[75%] relative left-[12.5%] pl-4 pr-4 text-current rounded-md mt-[4%] scale-110 mt[6%]"
+                class="border bg-transparent w-[75%] cursor-pointer relative left-[12.5%] pl-4 pr-4 text-current rounded-md mt-[4%] scale-110 mt[6%]"
                 >Log In</button
             >
         </form>

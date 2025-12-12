@@ -1,7 +1,9 @@
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "../$types";
 
-const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
+    console.log("logging out")
     event.cookies.delete('team', {path: '/'});
     event.cookies.delete('admin', {path: '/'});
-    return { status: 303, redirect: '/login' };
+    redirect(303, '/login');
 }

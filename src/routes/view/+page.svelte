@@ -101,11 +101,11 @@
         {#if teamGames.length == 0}
             <p>No matches found for this team.</p>
         {:else}
-            <ul class="mt-4">
+            <ul class="mt-4 flex flex-col gap-4">
                 {#each teamScores as teamScore}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <li class=" bg-slate-700 rounded-lg border p-4 cursor-pointer hover:bg-slate-500 hover:text-bold" onclick={() => {selectedScore = teamScore.score; scoreBreakdownDisplay=true}}>Round {teamScore.round} - Table {teamScore.table} (Score: {teamScore.score?.total || 0})</li>
+                    <li class=" bg-slate-700 rounded-lg border p-4 cursor-pointer hover:bg-slate-500 hover:text-bold" onclick={() => {selectedScore = teamScore.score || blankScore; scoreBreakdownDisplay=true; console.log(scoreBreakdownDisplay);}}>Round {teamScore.round} - Table {teamScore.table} (Score: {teamScore.score?.total || 0})</li>
                 {/each}
             </ul>
         {/if}
