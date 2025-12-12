@@ -87,6 +87,7 @@
 
 <div class="w-3/4 ml-[12.5%] h-[90%] flex flex-col items-center relative ">
     <Button text="Live Scoring" classContent="my-[2%] scale-[150%]" onClick={() => {goto(`/edit/events/${event.id}/scoring`)}}></Button> 
+    
     <div class="{addMatchPopup ? "blur-2xl" : ""}">
         <h1 class="text-center text-2xl font-bold">Event {event.season} | {event.type}</h1>
         
@@ -278,6 +279,7 @@
             </div>
         </div>
         <Button text="Add Match" onClick={createNewMatch}></Button>
+        
         <!-- svelte-ignore a11y_consider_explicit_label -->
         <button class="absolute top-0 right-0 bg-transparent hover:text-red-600 stroke-green-200 p-1 cursor-pointer" onclick={() => {addMatchPopup = false}}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
