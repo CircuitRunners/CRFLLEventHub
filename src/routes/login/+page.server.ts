@@ -56,7 +56,7 @@ export const actions: Actions = {
                 sameSite: 'strict',
                 expires: new Date(8.64e15)
             });
-            redirect(303, '/edit');
+            redirect(303, '/edit/events');
             return {
                 status: 200,
                 body: { message: "You are now logged in" },

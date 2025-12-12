@@ -46,23 +46,23 @@
 </script>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
-<div class="border rounded-lg p-4 h-fit w-full bg-slate-800 relative">
+<div class="border rounded-lg p-4 h-fit w-full  {event.live === true ? "bg-slate-600" : "bg-slate-800"} relative">
     <div class ="{addTeamPopup? "blur-2xl" : "blur-0"}">
         <div class="flex justify-between gap-2 ">
             <div class="w-1/2 h-full">
                 <label for="season" class="text-center text-md">Select a Season</label>
-                <select name="Season" class="bg-slate-800  border rounded-lg p-2 w-full" bind:value={event.season}>
+                <select name="Season" class="{event.live === true ? "bg-slate-600" : "bg-slate-800"}  border rounded-lg p-2 w-full" bind:value={event.season}>
                     <option value="Test">Test Event</option>
                     <option  value="Unearthed 2025-2026">Unearthed 2025-2026</option>
                 </select>
                 <label for="type" class="text-center text-md">Select a Type</label>
-                <select name="Type" class="bg-slate-800  border rounded-lg p-2 w-full" bind:value={event.type}>
+                <select name="Type" class="{event.live === true ? "bg-slate-600" : "bg-slate-800"}  border rounded-lg p-2 w-full" bind:value={event.type}>
                     <option value="Test">Test Event</option>
                     <option  value="Regional">Regional</option>
                     <option  value="Super Regional">Super Regional</option>
                 </select>
                 <label for="live" class="text-center text-md">Is the event live?</label>
-                <select name="live" class="bg-slate-800  border rounded-lg p-2 w-full" bind:value={event.live}>
+                <select name="live" class="{event.live === true ? "bg-slate-600" : "bg-slate-800"}  border rounded-lg p-2 w-full" bind:value={event.live}>
                     <option value={true}>Yes</option>
                     <option  value={false}>No</option>
                 </select>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Button from '$lib/components/Button.svelte';
 	import { getMatch } from '$lib/db';
 	import { onMount } from 'svelte';
 
@@ -31,4 +32,7 @@
             </div>
         </div>
     {/each}
+    <div class=" flex justify-center mt-4">
+        <Button text="Back to Event" onClick={() => goto(`/edit/events/${event.id}/`)}></Button>
+    </div>
 </div>

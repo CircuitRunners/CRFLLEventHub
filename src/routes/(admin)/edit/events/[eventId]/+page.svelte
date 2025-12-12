@@ -168,7 +168,7 @@
                     </div>
                 </div>
             </div>
-            <Button text="Update Match" onClick={() => saveMatch(match)}></Button>
+            <Button text="Update Match" classContent="my-4" onClick={() => saveMatch(match)}></Button>
             <!-- svelte-ignore a11y_consider_explicit_label -->
             <button class="absolute top-0 right-0 bg-transparent hover:text-red-600 stroke-green-200 p-1 cursor-pointer" onclick={() => {addMatchPopup = false}}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -185,119 +185,81 @@
             <label for="time" class="text-center text-md">Select a Time</label>
             <input type="time" class="bg-slate-600 border rounded-lg p-2 w-full" bind:value={newMatch.time}>
         </div>
-        <div class="flex flex-col gap-4 overflow-scroll w-3/4">
-            <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
-                <h1 class="text-center text-lg font-bold">Table 1</h1>
-                <div class="flex flex-col items-start mb-2 gap-1">
-                    <label for="team" class="text-center text-md">Select a Team</label>
-                    <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table1.team}>
-                        <option value="-1" selected>Select a Team</option>
-                        {#each event.team_numbers as team}
-                            <option value={team}>{team}</option>
-                        {/each}
-                    </select>
+        <div class="flex flex-row gap-4 w-full h-full">
+            <div class="flex flex-col gap-4 overflow-scroll w-1/2">
+                <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
+                    <h1 class="text-center text-lg font-bold">Table 1</h1>
+                    <div class="flex flex-col items-start mb-2 gap-1">
+                        <label for="team" class="text-center text-md">Select a Team</label>
+                        <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table1.team}>
+                            <option value="-1" selected>Select a Team</option>
+                            {#each event.team_numbers as team}
+                                <option value={team}>{team}</option>
+                            {/each}
+                        </select>
+                    </div>
                 </div>
-                <div class="absolute right-0 w-[48%] z-10 top-[25%] flex-col flex gap-2 items-center rounded-lg h-[75%] border ">
-                    <h1 class="text-center text-lg font-bold">Score</h1>
-                    <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class="text-center border rounded-lg text-green-200 p-1 bg-slate-700 hover:bg-slate-500 cursor-pointer hover:text-amber-600" onclick={() => goto(`/edit/events/${event.id}/-1/table1`)}>
-                        Go to score
-                    </button>
-                </div>
-            </div>
-            <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
-                <h1 class="text-center text-lg font-bold">Table 2</h1>
-                <div class="flex flex-col items-start mb-2 gap-1">
-                    <label for="team" class="text-center text-md">Select a Team</label>
-                    <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table2.team}>
-                        <option value="-1" selected>Select a Team</option>
-                        {#each event.team_numbers as team}
-                        <option value={team}>{team}</option>
-                        {/each}
-                    </select>
-                </div>
-                <div class="absolute right-0 w-[48%] z-10 top-[25%] flex-col flex gap-2 items-center rounded-lg h-[75%] border ">
-                    <h1 class="text-center text-lg font-bold">Score</h1>
-                    <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class="text-center border rounded-lg text-green-200 p-1 bg-slate-700 hover:bg-slate-500 cursor-pointer hover:text-amber-600" onclick={() => goto(`/edit/events/${event.id}/-1/table2`)}>
-                        Go to score
-                    </button>
-                </div>
-            </div>
-            <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
-                <h1 class="text-center text-lg font-bold">Table 3</h1>
-                <div class="flex flex-col items-start mb-2 gap-1">
-                    <label for="team" class="text-center text-md">Select a Team</label>
-                    <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table3.team}>
-                        <option value="-1" selected>Select a Team</option>
-                        {#each event.team_numbers as team}
-                            <option value={team}>{team}</option>
-                        {/each}
-                    </select>
-                </div>
-                <div class="absolute right-0 w-[48%] z-10 top-[25%] flex-col flex gap-2 items-center rounded-lg h-[75%] border ">
-                    <h1 class="text-center text-lg font-bold">Score</h1>
-                    <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class="text-center border rounded-lg text-green-200 p-1 bg-slate-700 hover:bg-slate-500 cursor-pointer hover:text-amber-600" onclick={() => goto(`/edit/events/${event.id}/-1/table3`)}>
-                        Go to score
-                    </button>
-                </div>
-            </div>
-            <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
-                <h1 class="text-center text-lg font-bold">Table 4</h1>
-                <div class="flex flex-col items-start mb-2 gap-1">
-                    <label for="team" class="text-center text-md">Select a Team</label>
-                    <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table4.team}>
-                        <option value="-1" selected>Select a Team</option>
-                        {#each event.team_numbers as team}
+                <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
+                    <h1 class="text-center text-lg font-bold">Table 2</h1>
+                    <div class="flex flex-col items-start mb-2 gap-1">
+                        <label for="team" class="text-center text-md">Select a Team</label>
+                        <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table2.team}>
+                            <option value="-1" selected>Select a Team</option>
+                            {#each event.team_numbers as team}
                             <option value={team}>{team}</option>
                             {/each}
-                    </select>
+                        </select>
+                    </div>
                 </div>
-                <div class="absolute right-0 w-[48%] z-10 top-[25%] flex-col flex gap-2 items-center rounded-lg h-[75%] border ">
-                    <h1 class="text-center text-lg font-bold">Score</h1>
-                    <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class="text-center border rounded-lg text-green-200 p-1 bg-slate-700 hover:bg-slate-500 cursor-pointer hover:text-amber-600" onclick={() => goto(`/edit/events/${event.id}/-1/table4`)}>
-                        Go to score
-                    </button>
-                </div>
-            </div>
-            <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
-                <h1 class="text-center text-lg font-bold">Table 5</h1>
-                <div class="flex flex-col items-start mb-2 gap-1">
-                    <label for="team" class="text-center text-md">Select a Team</label>
-                    <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table5.team}>
-                        <option value="-1" selected>Select a Team</option>
-                        {#each event.team_numbers as team}
-                        <option value={team}>{team}</option>
-                        {/each}
-                    </select>
-                </div>
-                <div class="absolute right-0 w-[48%] z-10 top-[25%] flex-col flex gap-2 items-center rounded-lg h-[75%] border ">
-                    <h1 class="text-center text-lg font-bold">Score</h1>
-                    <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class="text-center border rounded-lg text-green-200 p-1 bg-slate-700 hover:bg-slate-500 cursor-pointer hover:text-amber-600" onclick={() => goto(`/edit/events/${event.id}/-1/table5`)}>
-                        Go to score
-                    </button>
+                <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
+                    <h1 class="text-center text-lg font-bold">Table 3</h1>
+                    <div class="flex flex-col items-start mb-2 gap-1">
+                        <label for="team" class="text-center text-md">Select a Team</label>
+                        <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table3.team}>
+                            <option value="-1" selected>Select a Team</option>
+                            {#each event.team_numbers as team}
+                                <option value={team}>{team}</option>
+                            {/each}
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
-                <h1 class="text-center text-lg font-bold">Table 6</h1>
-                <div class="flex flex-col items-start mb-2 gap-1">
-                    <label for="team" class="text-center text-md">Select a Team</label>
-                    <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table6.team}>
-                        <option value="-1" selected>Select a Team</option>
-                        {#each event.team_numbers as team}
+            <div class="flex flex-col gap-4 overflow-scroll w-1/2">
+                <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
+                    <h1 class="text-center text-lg font-bold">Table 4</h1>
+                    <div class="flex flex-col items-start mb-2 gap-1">
+                        <label for="team" class="text-center text-md">Select a Team</label>
+                        <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table4.team}>
+                            <option value="-1" selected>Select a Team</option>
+                            {#each event.team_numbers as team}
+                                <option value={team}>{team}</option>
+                                {/each}
+                        </select>
+                    </div>
+                </div>
+                <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
+                    <h1 class="text-center text-lg font-bold">Table 5</h1>
+                    <div class="flex flex-col items-start mb-2 gap-1">
+                        <label for="team" class="text-center text-md">Select a Team</label>
+                        <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table5.team}>
+                            <option value="-1" selected>Select a Team</option>
+                            {#each event.team_numbers as team}
                             <option value={team}>{team}</option>
-                        {/each}
-                    </select>
+                            {/each}
+                        </select>
+                    </div>
                 </div>
-                <div class="absolute right-0 w-[48%] z-10 top-[25%] flex-col flex gap-2 items-center rounded-lg h-[75%] border ">
-                    <h1 class="text-center text-lg font-bold">Score</h1>
-                    <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class="text-center border rounded-lg text-green-200 p-1 bg-slate-700 hover:bg-slate-500 cursor-pointer hover:text-amber-600" onclick={() => goto(`/edit/events/${event.id}/-1/table6`)}>
-                        Go to score
-                    </button>
+                <div class="border rounded-lg w-full h-1/6 px-2 bg-slate-600 relative">
+                    <h1 class="text-center text-lg font-bold">Table 6</h1>
+                    <div class="flex flex-col items-start mb-2 gap-1">
+                        <label for="team" class="text-center text-md">Select a Team</label>
+                        <select name="team" class="bg-slate-600  border rounded-lg p-2 w-1/2" bind:value={newMatch.table6.team}>
+                            <option value="-1" selected>Select a Team</option>
+                            {#each event.team_numbers as team}
+                                <option value={team}>{team}</option>
+                            {/each}
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

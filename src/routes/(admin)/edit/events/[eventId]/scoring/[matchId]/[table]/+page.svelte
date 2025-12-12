@@ -4,6 +4,8 @@
     import { blankScore } from '$lib/index';
 	import ScoreBreakdown from '$lib/components/ScoreBreakdown.svelte';
 	import { onMount } from 'svelte';
+	import Button from '$lib/components/Button.svelte';
+	import { goto } from '$app/navigation';
 
     
 
@@ -27,4 +29,7 @@
 </script>
 <div class="w-full h-full pb-[5%]">
     <ScoreBreakdown {score} {match} isEditing={true}/>
+    <div class=" flex justify-center mt-4">
+        <Button text="Back to Table Selection" onClick={() => goto(`/edit/events/${event.id}/scoring/${match.id}`)}></Button>
+    </div>
 </div>

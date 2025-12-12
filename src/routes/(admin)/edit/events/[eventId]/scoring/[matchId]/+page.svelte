@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import AnimatedInputLabel from '$lib/components/AnimatedInputLabel.svelte';
+	import Button from '$lib/components/Button.svelte';
 	import { getMatch } from '$lib/db';
 	import { onMount } from 'svelte';
 
@@ -22,4 +23,7 @@
             <AnimatedInputLabel size="cursor-pointer" name="Team" value={table.team} disabled={true} labelbg=" group-hover:bg-slate-500 bg-slate-800" mt="mt-2"/>
         </div>
     {/each}
+    <div class=" flex justify-center mt-4">
+        <Button text="Back to Match Selection" onClick={() => goto(`/edit/events/${event.id}/scoring/`)}></Button>
+    </div>
 </div>
