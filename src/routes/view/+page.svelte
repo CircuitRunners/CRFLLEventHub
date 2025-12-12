@@ -95,7 +95,7 @@
 <div class="w-full px-[10%] flex flex-col items-center h-fit overflow-visible relative bg-black">
     <div class="w-full h-fit flex flex-col items-center {scoreBreakdownDisplay ? "blur-md" : "blur-0"}">
         <h2 class="text-center text-3xl font-bold">
-            Hello {teamname}! 
+            Hello {teamname}! <br> Team {teamnum} 
         </h2>
         <p class="text-center text-2xl font-bold mt-4">
             Event {event.season} | {event.type}  <br> {admin ? "Team View Mode" : ""}
@@ -103,11 +103,11 @@
         {#if admin}
             <Button text="Select a Team" classContent="mt-2" onClick={() => {teamSelectPopup = true}}></Button>
             <div class="absolute top-1/8 right-1/8 px-[10%] border rounded-2xl grid grid-cols-6 grid-rows-4 bg-slate-700 w-3/4 h-full mt-2 mr-2 {teamSelectPopup ? "" : "hidden"}">
-                {#if teamnum !== -1}
+                {#if teamnum != -1}
                     <form action="/view" method="POST">
                         <input type="hidden" name="team" value={-1}>
                         <button type="submit" class="flex justify-center items-center w-fit p-2 border rounded-md hover:cursor-pointer hover:bg-slate-500 hover:text-green-300">
-                            <h1 class="text-center text-xl font-bold">{-1}</h1>
+                            <h1 class="text-center text-xl font-bold">Admin</h1>
                         </button>
                     </form>
                 {:else}
