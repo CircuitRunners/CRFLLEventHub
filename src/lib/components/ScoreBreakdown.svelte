@@ -1,29 +1,62 @@
 <script lang="ts">
 	import type { Score } from "$lib";
-	import { createScore, updateMatch, updateScore } from "$lib/db";
+	import { createScore, updateMatch, updateScore, updateTeam } from "$lib/db";
     import { blankScore } from "$lib/index";
 	import AsyncButton from "./AsyncButton.svelte";
 	import Button from "./Button.svelte";
     export let score: Score = blankScore;
     export let match: any;
     export let isEditing: boolean = true;
+    export let table = "";
+    export let team;
     const saveScore = async () => {
         console.log(score)
         if(score.id) {
             console.log("updating")
             let data = await updateScore(score);
-            console.log(data)
+            // console.log(data)
+            let current_score_total = score.total || 0;
+            let team_highest_score = team.highest_score
+            // console.log("team_highest" + team_highest_score)
+            // console.log( "score_total" + current_score_total)
+            if(team_highest_score < current_score_total) {
+                // console.log("current score higher")
+                team.highest_score = current_score_total;
+                // console.log(team)
+                let data = await updateTeam(team);
+                // console.log(data)
+            } else if (team_highest_score === null) {
+                team.highest_score = current_score_total;
+                let data = await updateTeam(team);
+                // console.log(data)
+            }
         } else {
             console.log("creating")
             // console.log(score)
             let data = await createScore(score);
-            console.log(data)
+            // console.log(data)
             score = data as unknown as Score;
-            console.log(score.id)
-            match.table.score = score.id;
+            // console.log(score.id)
             // console.log(table)
-            console.log(match)
+            match[table].score = score.id;
+            // console.log(table)
+            // console.log(match)
             await updateMatch(match);
+            let current_score_total = score.total || 0;
+            let team_highest_score = team.highest_score
+            // console.log("team_highest" + team_highest_score)
+            // console.log( "score_total" + current_score_total)
+            if(team_highest_score < current_score_total) {
+                // console.log("current score higher")
+                team.highest_score = current_score_total;
+                // console.log(team)
+                let data = await updateTeam(team);
+                // console.log(data)
+            } else if (team_highest_score === null) {
+                team.highest_score = current_score_total;
+                let data = await updateTeam(team);
+                // console.log(data)
+            }
         }
     };
 

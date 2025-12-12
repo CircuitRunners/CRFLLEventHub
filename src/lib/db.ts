@@ -89,6 +89,14 @@ export const getTeam = async (id: number) => {
     }
     return data
 }
+export const getTeamByNumber = async (number: number) => {
+    const { data, error } = await supabase.from('Team').select('*').eq('number', number)
+    if (error) {
+        console.log(error)
+        return null
+    }
+    return data
+}
 export const createTeam = async (team: any) => {
     let teams = await getTeams();
     if (teams?.map((team: any) => team.number).indexOf(team.number) != -1) {

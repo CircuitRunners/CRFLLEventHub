@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          live: boolean | null
           rankings: Json | null
           schedule: Json | null
           season: string | null
@@ -27,6 +28,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
+          live?: boolean | null
           rankings?: Json | null
           schedule?: Json | null
           season?: string | null
@@ -36,6 +38,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: number
+          live?: boolean | null
           rankings?: Json | null
           schedule?: Json | null
           season?: string | null
@@ -164,6 +167,7 @@ export type Database = {
       Team: {
         Row: {
           created_at: string
+          highest_score: number | null
           id: number
           name: string | null
           number: number | null
@@ -171,6 +175,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          highest_score?: number | null
           id?: number
           name?: string | null
           number?: number | null
@@ -178,6 +183,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          highest_score?: number | null
           id?: number
           name?: string | null
           number?: number | null

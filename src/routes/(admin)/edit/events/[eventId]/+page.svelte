@@ -1,8 +1,9 @@
 <script lang='ts'>
-	import { addMatchToEvent, getMatch, updateMatch } from '$lib/db.ts';
+	import AsyncButton from '$lib/components/AsyncButton.svelte';
+	import { addMatchToEvent, getMatch, getTeamByNumber, updateMatch } from '$lib/db.ts';
 	import { goto } from '$app/navigation';
-	import Button from '$lib/components/Button.svelte';
 	import EventCard from '$lib/components/EventCard.svelte';
+    import Button from '$lib/components/Button.svelte';
 	import { createMatch, updateEvent } from '$lib/db.js';
 	import { onMount } from 'svelte';
 
@@ -70,6 +71,18 @@
         let data = await updateMatch(match);
         console.log(data)
     }
+    const updateRankings = async () => {
+        let rankings = [];
+        for (let team of event.team_numbers) {
+            let team_data = (await getTeamByNumber(team))![0];
+            rankings.push({team, highest_score: (team_data.highest_score || 0)});
+        }
+        rankings = rankings.sort((a, b) => b.highest_score - a.highest_score);
+        event.rankings = rankings;
+        console.log(event.rankings)
+        let data = await updateEvent(event);
+        console.log(data)
+    }
 </script>
 
 <div class="w-3/4 ml-[12.5%] h-[90%] flex flex-col items-center relative ">
@@ -79,6 +92,7 @@
         
         <EventCard event={event} closeEventPopup={async() => {}} createEvent={async() => {}} type="update" />
     </div>
+    <AsyncButton text="Update Rankings" classContent="my-[2%] scale-[150%]" onClick={updateRankings}></AsyncButton>
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <div class="w-full h-fit flex flex-col items-center {addMatchPopup ? "blur-2xl" : ""} justify-center">
         <h1 class="text-center text-2xl font-bold mb-[2%]">{event.schedule ? "Update" : "Create" } Schedule</h1> 

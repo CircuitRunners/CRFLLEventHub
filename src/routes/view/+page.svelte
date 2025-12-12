@@ -111,7 +111,7 @@
         {/if}
     </div>
     <div class="{scoreBreakdownDisplay ? "" : "hidden"} w-[100%] absolute top-0 rounded-2xl h-fit bg-blur"> 
-        <ScoreBreakdown score={selectedScore} isEditing={false} match={null} ></ScoreBreakdown>
+        <ScoreBreakdown score={selectedScore} isEditing={false} match={null} team={null} ></ScoreBreakdown>
         <!-- svelte-ignore a11y_consider_explicit_label -->
         <button class="fixed top-[10%] right-[10%] z-10 cursor-pointer bg-transparent hover:text-red-600 stroke-green-200" onclick={() => scoreBreakdownDisplay = false}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">

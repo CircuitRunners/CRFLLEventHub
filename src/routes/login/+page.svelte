@@ -10,8 +10,8 @@
     (async () => {
         let teams = await getTeams();
         console.log(teams);      
-        let num = (teams[0].number);
-        let numpass = (teams[0].password);
+        let num = (teams![0].number);
+        let numpass = (teams![0].password);
     })();
 
     let username: string

@@ -4,7 +4,7 @@ export const load = async ({params}) => {
     const match = await getMatch(params.matchId as unknown as number)
     const event = await getEvent(params.eventId as unknown as number)
     if (match !== null) {
-        return {match, event, table: params.table as unknown as number};
+        return {match, event, table: params.table as unknown as string};
     } else {
         console.log("match not found")
         return { status: 404 }
