@@ -17,9 +17,9 @@ export const load: PageServerLoad = async ({ cookies }) => {
         return { teamName: null };
     }
     const teams = await getTeams();
-    console.log(teams);
+    // console.log(teams);
     const team = teams!.find(t => String(t.number) === teamNumber);
-    console.log(team)
+    // console.log(team)
     const live_event = (await getEvents())?.filter((e: any) => e.live)[0] as any;
     // console.log(live_event);
     let matches = []
@@ -32,6 +32,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const scores = await getScores();
 
     if (teamNumber === "-1") {
+        console.log("admin")
         return {
             teamName: "Admin",
             teamNum: -1,
@@ -40,7 +41,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
             scores: scores ? scores : null
         };
     }
-
+    console.log(team)
     return {
         
         teamName: team?.name ?? null,

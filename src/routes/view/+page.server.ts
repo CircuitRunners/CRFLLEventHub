@@ -12,6 +12,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     }
 
     const teamNumber = cookies.get("team");
+    const admin = cookies.get("admin");
     
     if (!teamNumber) {
         return { teamName: null };
@@ -32,22 +33,24 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const scores = await getScores();
 
     if (teamNumber === "-1") {
+        console.log("admin")
         return {
             teamName: "Admin",
-            teamNum: -1,
+            teamNum: teamNumber,
             live_event: live_event ? live_event : null,
             matches: matches ? matches : null,
-            scores: scores ? scores : null
+            scores: scores ? scores : null,
+            admin: admin === "true" ? true : false
         };
     }
 
     return {
-        
         teamName: team?.name ?? null,
         teamNum: team ? team.number : null,
         live_event: live_event ? live_event : null,
         matches: matches ? matches : null,
-        scores: scores ? scores : null
+        scores: scores ? scores : null,
+        admin: admin === "true" ? true : false
         
     };
 };
@@ -69,3 +72,19 @@ export const load: PageServerLoad = async ({ cookies }) => {
 //     return data
 // }
 
+export const actions = {
+    default: async (event) => {
+        console.log("team select")
+        let formData = Object.fromEntries(await event.request.formData());
+        console.log(formData)
+        let teamNum = formData.team as string;
+        event.cookies.set('team', teamNum, {
+            httpOnly: true,
+            path: '/',
+            secure: true,
+            sameSite: 'strict',
+            expires: new Date(8.64e15)
+        });
+        redirect(303, '/view');
+    }
+}
