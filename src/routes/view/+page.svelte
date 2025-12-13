@@ -95,8 +95,8 @@
                 No matches found.
             </p>
         {:else}
-            <div class="grid gap-4 sm:grid-cols-2">
-                {#each teamScores as teamScore}
+            <div class="grid gap-4  sm:grid-cols-2">
+                {#each teamScores as teamScore, i}
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div
@@ -182,21 +182,6 @@
                 </button>
 
                 <div class="grid grid-cols-5 sm:grid-cols-6 gap-3">
-                    
-                    {#if teamnum != -1}
-                        <form 
-                            action="/view" 
-                            method="POST" 
-                            class="col-span-full" 
-                        
-                        >
-                            <input type="hidden" name="team" value={-1}>
-                            <button type="submit" 
-                                class="w-full p-3 rounded-xl text-lg font-bold transition-colors border-2 bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700 shadow-lg">
-                                Switch to Admin View
-                            </button>
-                        </form>
-                    {:else}
                         {#each teamNumbers as team}
                             <form action="/view" method="POST">
                                 <input type="hidden" name="team" value={team}>
@@ -214,8 +199,6 @@
                                 </button>
                             </form>
                         {/each}
-                    {/if}
-
                 </div>
                 
             </div>
