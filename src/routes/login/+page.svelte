@@ -26,7 +26,7 @@
 <div class="flex justify-center">
     <div class="flex flex-col w-1/2 relative justify-center">
         <AnimatedInputLabel
-            name="Username"
+            name="Team Number"
             labelbg="bg-black"
             bind:value={username}
             size="scale-110"
