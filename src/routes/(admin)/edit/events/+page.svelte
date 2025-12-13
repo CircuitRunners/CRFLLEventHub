@@ -43,9 +43,10 @@
         {#if events}
             {#each events as event}
                 <EventCard event={event} closeEventPopup={async() => {
-                    events = events.filter((old_event: any) => old_event.id !== event.id);
-                    console.log(events)
-                    await deleteEvent(event.id)
+                    // events = events.filter((old_event: any) => old_event.id !== event.id);
+                    // console.log(events)
+                    // await deleteEvent(event.id)
+                    alert("We will not delete events right now")
                 }} />
             {/each}
         {:else}

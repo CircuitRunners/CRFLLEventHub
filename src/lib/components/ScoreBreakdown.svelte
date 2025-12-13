@@ -17,10 +17,10 @@
             // console.log(data)
             let current_score_total = score.total || 0;
             let team_highest_score = team.highest_score
-            // console.log("team_highest" + team_highest_score)
-            // console.log( "score_total" + current_score_total)
+            console.log("team_highest" + team_highest_score)
+            console.log( "score_total" + current_score_total)
             if(team_highest_score < current_score_total) {
-                // console.log("current score higher")
+                console.log("current score higher")
                 team.highest_score = current_score_total;
                 // console.log(team)
                 let data = await updateTeam(team);
