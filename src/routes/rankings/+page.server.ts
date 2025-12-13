@@ -7,19 +7,9 @@ import { redirect } from "@sveltejs/kit";
 
 
 export const load: PageServerLoad = async ({ cookies }) => {
-    if(!cookies.get('team')) {
-        redirect(303, '/login');
-    }
-
     const teamNumber = cookies.get("team");
-    
-    if (!teamNumber) {
-        return { teamName: null };
-    }
     const teams = await getTeams();
     // console.log(teams);
-    const team = teams!.find(t => String(t.number) === teamNumber);
-    // console.log(team)
     const live_event = (await getEvents())?.filter((e: any) => e.live)[0] as any;
     // console.log(live_event);
     let matches = []
@@ -30,6 +20,16 @@ export const load: PageServerLoad = async ({ cookies }) => {
     }
     // console.log(matches);
     const scores = await getScores();
+    if(!teamNumber) {
+        return { teamName: "Null",
+            teamNum: 0,
+            live_event: live_event ? live_event : null,
+            matches: matches ? matches : null,
+            scores: scores ? scores : null 
+        };
+    }
+    const team = teams!.find(t => String(t.number) === teamNumber);
+    // console.log(team)
 
     if (teamNumber === "-1") {
         console.log("admin")
