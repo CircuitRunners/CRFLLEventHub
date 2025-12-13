@@ -8,7 +8,7 @@ import { redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ cookies }) => {
     if(!cookies.get('team')) {
-        redirect(303, '/login');
+        redirect(303, '/rankings');
     }
 
     const teamNumber = cookies.get("team");

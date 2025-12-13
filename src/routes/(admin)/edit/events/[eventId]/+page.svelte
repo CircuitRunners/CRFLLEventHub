@@ -72,12 +72,17 @@
         console.log(data)
     }
     const updateRankings = async () => {
+        let past_rankings = event.rankings;
         let rankings = [];
         for (let team of event.team_numbers) {
             let team_data = (await getTeamByNumber(team))![0];
             rankings.push({team, highest_score: (team_data.highest_score || 0)});
         }
         rankings = rankings.sort((a, b) => b.highest_score - a.highest_score);
+        if(past_rankings === rankings) {
+            console.log("no change")
+            return;
+        }
         event.rankings = rankings;
         console.log(event.rankings)
         let data = await updateEvent(event);
