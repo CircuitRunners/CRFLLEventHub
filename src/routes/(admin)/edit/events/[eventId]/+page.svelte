@@ -93,7 +93,7 @@
         
         <EventCard event={event} closeEventPopup={async() => {}} createEvent={async() => {}} type="update" />
     </div>
-    <AsyncButton text="Update Rankings" classContent="my-[2%] scale-[150%]" onClick={updateRankings}></AsyncButton>
+    <button onclick={async() => {await updateRankings()}} class="bg-slate-500 hover:bg-slate-700 mt-2 cursor-pointer text-green-300 font-bold py-2 px-4 rounded w-fit">Update Rankings</button>
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <div class="w-full h-fit flex flex-col items-center {addMatchPopup ? "blur-2xl" : ""} justify-center">
         <h1 class="text-center text-2xl font-bold mb-[2%]">{event.schedule ? "Update" : "Create" } Schedule</h1> 
