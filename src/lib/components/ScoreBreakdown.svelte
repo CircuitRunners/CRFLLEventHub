@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Score } from "$lib";
 	import { createScore, updateMatch, updateScore, updateTeam } from "$lib/db";
-    import { blankScore } from "$lib/index";
+	import { blankScore } from "$lib/index";
 	import AsyncButton from "./AsyncButton.svelte";
 	import Button from "./Button.svelte";
     export let score: Score = blankScore;
@@ -9,12 +9,13 @@
     export let isEditing: boolean = true;
     export let table = "";
     export let team;
+    
+    // Logic from original component
     const saveScore = async () => {
         console.log(score)
         if(score.id) {
             console.log("updating")
             let data = await updateScore(score);
-            // console.log(data)
             let current_score_total = score.total || 0;
             let team_highest_score = team.highest_score
             console.log("team_highest" + team_highest_score)
@@ -22,40 +23,25 @@
             if(team_highest_score < current_score_total) {
                 console.log("current score higher")
                 team.highest_score = current_score_total;
-                // console.log(team)
                 let data = await updateTeam(team);
-                // console.log(data)
             } else if (team_highest_score === null) {
                 team.highest_score = current_score_total;
                 let data = await updateTeam(team);
-                // console.log(data)
             }
         } else {
             console.log("creating")
-            // console.log(score)
             let data = await createScore(score);
-            // console.log(data)
             score = data as unknown as Score;
-            // console.log(score.id)
-            // console.log(table)
             match[table].score = score.id;
-            // console.log(table)
-            // console.log(match)
             await updateMatch(match);
             let current_score_total = score.total || 0;
             let team_highest_score = team.highest_score
-            // console.log("team_highest" + team_highest_score)
-            // console.log( "score_total" + current_score_total)
             if(team_highest_score < current_score_total) {
-                // console.log("current score higher")
                 team.highest_score = current_score_total;
-                // console.log(team)
                 let data = await updateTeam(team);
-                // console.log(data)
             } else if (team_highest_score === null) {
                 team.highest_score = current_score_total;
                 let data = await updateTeam(team);
-                // console.log(data)
             }
         }
     };
@@ -64,19 +50,21 @@
         let total = 0;
         // Equipment Inspection
         total += score.equipment_inspection ? 20 : 0;
-        
         if (!score.equipment_inspection) {
             score.total = 0;
             return;
         }
 
         //Mission 01 - Surface Brushing
-        total += score.mission01!.part1 ? 10 * score.mission01!.part1 : 0;
-        total += score.mission01!.part2 ? 10 : 0; 
+        total += score.mission01!.part1 ?
+        10 * score.mission01!.part1 : 0;
+        total += score.mission01!.part2 ? 10 : 0;
         //Mission 02 - Map Reveal
-        total += score.mission02!.part1 ? 10 * score.mission02!.part1 : 0;
+        total += score.mission02!.part1 ?
+        10 * score.mission02!.part1 : 0;
         //Mission 03 - Mineshaft Explorer
-        total += score.mission03!.part1 ? 30 : 0;
+        total += score.mission03!.part1 ?
+        30 : 0;
         total += score.mission03!.part2 && score.mission03!.part1 ? 10 : 0;
         //Mission 04 - Careful Recovery
         total += score.mission04!.part1 ? 30 : 0;
@@ -89,7 +77,6 @@
         total += score.mission07!.part1 ? 30 : 0;
         //Mission 08 - Silo
         total += score.mission08!.part1 ? 10 * score.mission08!.part1 : 0;
-
         //Mission 09 - What's on Sale?
         total += score.mission09!.part1 ? 20 : 0;
         total += score.mission09!.part2 ? 10 : 0;
@@ -97,17 +84,21 @@
         total += score.mission10!.part1 ? 20 : 0;
         total += score.mission10!.part2 ? 10 : 0;
         //Mission 11 - Angler Artifacts
-        total += score.mission11!.part1 ? 20 : 0;
+        total += score.mission11!.part1 ?
+        20 : 0;
         total += score.mission11!.part2  && score.mission11!.part1 ? 10 : 0;
         //Mission 12 - Salvage Operation
         total += score.mission12!.part1 ? 20 : 0;
         total += score.mission12!.part2 ? 10 : 0;
         //Mission 13 - Statue Rebuild
-        total += score.mission13!.part1 ? 30 : 0;
+        total += score.mission13!.part1 ?
+        30 : 0;
         //Mission 14 - Forum
-        total += score.mission14!.part1 ? 5 * score.mission14!.part1 : 0;
+        total += score.mission14!.part1 ?
+        5 * score.mission14!.part1 : 0;
         //Mission 15 - Site Marking
-        total += score.mission15!.part1 ? 10 * score.mission15!.part1 : 0;
+        total += score.mission15!.part1 ?
+        10 * score.mission15!.part1 : 0;
         let tokens = score.precision_tokens;
         switch (tokens) {
             case 0:
@@ -139,373 +130,537 @@
     $: calculate_total(score)
 </script>
 
-<div class="w-full h-fit flex flex-col items-center relative rounded-2xl">
-    <div class="w-full flex flex-col items-center z-10 bg-black {isEditing ? "fixed" : "block bg-transparent"}">
+<div class="w-full max-w-7xl mx-auto h-fit flex flex-col items-center {isEditing ? "" : "overflow-auto"} relative p-2 sm:p-4">
+    <header class="w-full flex flex-col items-center z-20 bg-black/90 p-3 rounded-b-lg mb-4 
+        shadow-xl backdrop-blur-sm
+        {isEditing ? 'fixed top-0' : ''}"
+    >
         <h1 class="text-3xl font-extrabold h-fit">Score Breakdown</h1>
-        <div class="flex items-center gap-4 p-2">
-            <div class="p-2">
-                <p class="text-2xl font-bold">Total Score: <span class=" px-4 py-2 border border-slate-600">{score.total}</span> </p>  
-            </div>
+        <div class="flex items-center gap-4 mt-2">
+            <p class="text-xl sm:text-2xl font-bold">
+                Total Score: 
+                <span class="inline-block px-4 py-1.5 border-2 border-slate-600 rounded-lg bg-slate-900 ml-2">
+                    {score.total}
+                </span>
+            </p>  
         </div>
-    </div>
-    <div class="  {isEditing ? "mt-[10%]" : "mt-[4%]"} w-3/4 h-fit p-[2%] flex flex-col bg-slate-800 justify-center items-center border rounded-2xl" id="equipment_inspection"> 
-        <h1 class="text-2xl font-bold">
+    </header>
+
+    <div class="w-full md:w-3/4 max-w-lg p-4 flex flex-col bg-slate-800 justify-center items-center border border-slate-700 rounded-xl shadow-lg mb-4" id="equipment_inspection"> 
+        <h2 class="text-xl font-bold mb-2">
             Equipment Inspection
-        </h1>
-        <div>
-            <p>The robot and all equipment fit completely in one launch area and under the height limit
-            </p>
-        </div>
-        <div class="flex flex-row pt-4 justify-center items-center gap-2">
-            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.equipment_inspection === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.equipment_inspection = false}>No</button>
-            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.equipment_inspection === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.equipment_inspection = true}>Yes</button>
+        </h2>
+        <p class="text-center text-slate-300 mb-4">
+            The robot and all equipment fit completely in one launch area and under the height limit
+        </p>
+        <div class="flex flex-row pt-2 justify-center items-center gap-4">
+            <button disabled={!isEditing} 
+                class="px-6 py-2 rounded-lg text-md font-semibold transition-colors 
+                bg-gray-700 hover:bg-red-600 hover: 
+                disabled:opacity-50 disabled:cursor-not-allowed
+                {score.equipment_inspection === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                on:click={() => score.equipment_inspection = false}>
+                No
+            </button>
+            <button disabled={!isEditing} 
+                class="px-6 py-2 rounded-lg text-md font-semibold transition-colors 
+                bg-gray-700 hover:bg-green-600 hover:
+                disabled:opacity-50 disabled:cursor-not-allowed
+                {score.equipment_inspection === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                on:click={() => score.equipment_inspection = true}>
+                Yes
+            </button>
         </div>
     </div>
-    <div class="w-[80%] h-fit p-[2%] flex flex-row bg-slate-800 mt-4 justify-center items-center border rounded-2xl">
-        <div class="w-1/2 flex flex-col gap-4 pl-[10%] justify-start" id="missions1-8">
-            <div class="" id="mission01">
-                <h1 class="text-2xl font-bold">
-                    Mission 01 - Surface Brushing
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Soil deposits completely cleared, touching the mat
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        {#each [0, 1, 2] as i}
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission01!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part1 = i}>{i}</button>
-                        {/each}
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Archaeologist{"’"}s brush is not touching the dig site
     
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission01!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part2 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission01!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission01!.part2 = true}>Yes</button>
-                    </div>
-                </div>
-            </div>
-            <div class="" id="mission02">
-                <h1 class="text-2xl font-bold">
-                    Mission 02 - Map Reveal
-                </h1>
-                <div class="flex flex-col gap-2  p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Topsoil sections completely cleared
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        {#each [0, 1, 2, 3] as i}
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission02!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission02!.part1 = i}>{i}</button>
+    <div class="w-full flex flex-col md:flex-row gap-4 p-2">
+        
+        <div class="w-full md:w-1/2 flex flex-col gap-4" id="missions1-8">
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission01">
+                <h2 class="text-xl font-bold mb-3 ">Mission 01 - Surface Brushing</h2>
+                
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Soil deposits completely cleared, touching the mat (Count: 0-2)</p>
+                    <div class="flex justify-start gap-2">
+                        {#each [0, 1, 2] as i}
+                            <button disabled={!isEditing} 
+                                class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                                bg-gray-700 hover:bg-green-600 hover:
+                                disabled:opacity-50 disabled:cursor-not-allowed
+                                {score.mission01!.part1 === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                                on:click={() => score.mission01!.part1 = i}>
+                                {i}
+                            </button>
                         {/each}
                     </div>
                 </div>
-            </div>
-            <div class="" id="mission03">
-                <h1 class="text-2xl font-bold">
-                    Mission 03 - Mineshaft Explorer
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Your team’s minecart is on the opposing team’s field
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission03!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => {score.mission03!.part1 = false; score.mission03!.part2 = false}}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission03!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission03!.part1 = true}>Yes</button>
-                    
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Bonus: and the opposing team’s minecart is on your team’s field    
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""}  {score.mission03!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" disabled={!(isEditing && score.mission03!.part1)} on:click={() => score.mission03!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""}  {score.mission03!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" disabled={!(isEditing && score.mission03!.part1)} on:click={() => score.mission03!.part2 = true}>Yes</button>
-                    </div>
-            </div>
-            </div>
-            <div class="" id="mission04">
-                <h1 class="text-2xl font-bold">
-                    Mission 04 - Careful Recovery
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Precious artifact is not touching the mine
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission04!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission04!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part1 = true}>Yes</button>
-                    
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Both support structures are standing    
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission04!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part2 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission04!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission04!.part2 = true}>Yes</button>
+                
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Archaeologist’s brush is not touching the dig site</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission01!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission01!.part2 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission01!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission01!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission05">
-                <h1 class="text-2xl font-bold">
-                    Mission 05 - Who Lived Here?
-                </h1>
-                <div class="flex flex-col gap-2 p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Structure floor is completely upright
-                        </p>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission02">
+                <h2 class="text-xl font-bold mb-3 ">Mission 02 - Map Reveal</h2>
+                <p class="text-slate-300 mb-2">Topsoil sections completely cleared (Count: 0-3)</p>
+                <div class="flex justify-start gap-2">
+                    {#each [0, 1, 2, 3] as i}
+                        <button disabled={!isEditing} 
+                            class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission02!.part1 === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission02!.part1 = i}>
+                            {i}
+                        </button>
+                    {/each}
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission03">
+                <h2 class="text-xl font-bold mb-3 ">Mission 03 - Mineshaft Explorer</h2>
+                
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Your team’s minecart is on the opposing team’s field</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission03!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => {score.mission03!.part1 = false; score.mission03!.part2 = false}}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission03!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission03!.part1 = true}>Yes</button>
                     </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission05!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission05!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission05!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission05!.part1 = true}>Yes</button>
-                    
+                </div>
+
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Bonus: and the opposing team’s minecart is on your team’s field</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!(isEditing && score.mission03!.part1)} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:bg-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed
+                            {score.mission03!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission03!.part2 = false}>No</button>
+                        <button disabled={!(isEditing && score.mission03!.part1)} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:bg-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed
+                            {score.mission03!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission03!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission06">
-                <h1 class="text-2xl font-bold">
-                    Mission 06 - Forge
-                </h1>
-                <div class="flex flex-col gap-2  p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Ore blocks not touching the forge
-                        </p>
+            
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission04">
+                <h2 class="text-xl font-bold mb-3 ">Mission 04 - Careful Recovery</h2>
+                
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Precious artifact is not touching the mine</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission04!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission04!.part1 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission04!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission04!.part1 = true}>Yes</button>
                     </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        {#each [0, 1, 2, 3] as i}
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission06!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission06!.part1 = i}>{i}</button>
-                        {/each}
+                </div>
+                
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Both support structures are standing</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission04!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission04!.part2 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission04!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission04!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission07">
-                <h1 class="text-2xl font-bold">
-                    Mission 07 - Heavy Lifting
-                </h1>
-                <div class="flex flex-col gap-2 p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Millstone is no longer touching its base
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission07!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission07!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission07!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission07!.part1 = true}>Yes</button>
-                    
-                    </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission05">
+                <h2 class="text-xl font-bold mb-3 ">Mission 05 - Who Lived Here?</h2>
+                <p class="text-slate-300 mb-2">Structure floor is completely upright</p>
+                <div class="flex justify-start gap-4">
+                    <button disabled={!isEditing} 
+                        class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                        bg-gray-700 hover:bg-red-600 hover:
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        {score.mission05!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                        on:click={() => score.mission05!.part1 = false}>No</button>
+                    <button disabled={!isEditing} 
+                        class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                        bg-gray-700 hover:bg-green-600 hover:
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        {score.mission05!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                        on:click={() => score.mission05!.part1 = true}>Yes</button>
                 </div>
             </div>
-            <div class="" id="mission08">
-                <h1 class="text-2xl font-bold">
-                    Mission 08 - Silo
-                </h1>
-                <div class="flex flex-col gap-2  p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Preserved pieces outside the silo
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        {#each [0, 1, 2, 3] as i}
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission08!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission08!.part1 = i}>{i}</button>
-                        {/each}
-                    </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission06">
+                <h2 class="text-xl font-bold mb-3 ">Mission 06 - Forge</h2>
+                <p class="text-slate-300 mb-2">Ore blocks not touching the forge (Count: 0-3)</p>
+                <div class="flex justify-start gap-2">
+                    {#each [0, 1, 2, 3] as i}
+                        <button disabled={!isEditing} 
+                            class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission06!.part1 === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission06!.part1 = i}>
+                            {i}
+                        </button>
+                    {/each}
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission07">
+                <h2 class="text-xl font-bold mb-3 ">Mission 07 - Heavy Lifting</h2>
+                <p class="text-slate-300 mb-2">Millstone is no longer touching its base</p>
+                <div class="flex justify-start gap-4">
+                    <button disabled={!isEditing} 
+                        class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                        bg-gray-700 hover:bg-red-600 hover:
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        {score.mission07!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                        on:click={() => score.mission07!.part1 = false}>No</button>
+                    <button disabled={!isEditing} 
+                        class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                        bg-gray-700 hover:bg-green-600 hover:
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        {score.mission07!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                        on:click={() => score.mission07!.part1 = true}>Yes</button>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission08">
+                <h2 class="text-xl font-bold mb-3 ">Mission 08 - Silo</h2>
+                <p class="text-slate-300 mb-2">Preserved pieces outside the silo (Count: 0-3)</p>
+                <div class="flex justify-start gap-2">
+                    {#each [0, 1, 2, 3] as i}
+                        <button disabled={!isEditing} 
+                            class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission08!.part1 === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission08!.part1 = i}>
+                            {i}
+                        </button>
+                    {/each}
                 </div>
             </div>
         </div>
-        <div class="w-1/2 flex flex-col gap-4 pl-[10%] justify-start" id="missions9-15">
-            <div class="" id="mission09">
-                <h1 class="text-2xl font-bold">
-                    Mission 09 - What's on Sale?
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Roof is completely raised
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission09!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission09!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part1 = true}>Yes</button>
-                    
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Market wares are raised    
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission09!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part2 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission09!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission09!.part2 = true}>Yes</button>
+        
+        <div class="w-full md:w-1/2 flex flex-col gap-4" id="missions9-15">
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission09">
+                <h2 class="text-xl font-bold mb-3 ">Mission 09 - What's on Sale?</h2>
+                
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Roof is completely raised</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission09!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission09!.part1 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission09!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission09!.part1 = true}>Yes</button>
                     </div>
                 </div>
-            </div>
-            <div class="" id="mission10">
-                <h1 class="text-2xl font-bold">
-                    Mission 10 - Tip the Scales
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Scale is tipped and touching the mat
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission10!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission10!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part1 = true}>Yes</button>
-                    
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Scale pan is completely removed    
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission10!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part2 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission10!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission10!.part2 = true}>Yes</button>
+
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Market wares are raised</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission09!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission09!.part2 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission09!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission09!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission11">
-                <h1 class="text-2xl font-bold">
-                    Mission 11 - Angler Artifacts
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Artifacts are raised above the ground layer
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission11!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => {score.mission11!.part1 = false; score.mission11!.part2 = false} }>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission11!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission11!.part1 = true}>Yes</button>
-                    
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Bonus: and the crane flag is at least partly lowered    
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission11!.part2 === false ? "bg-red-500 text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""} transition-colors" disabled={!(isEditing && score.mission11!.part1)} on:click={() => score.mission11!.part2 = false}>No</button>
-                        <button class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission11!.part2 === true ? "bg-green-500 text-white" : ""} {isEditing ? "disabled:bg-slate-900 disabled:text-slate-600" : ""} transition-colors" disabled={!(isEditing && score.mission11!.part1)} on:click={() => score.mission11!.part2 = true}>Yes</button>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission10">
+                <h2 class="text-xl font-bold mb-3 ">Mission 10 - Tip the Scales</h2>
+
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Scale is tipped and touching the mat</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission10!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission10!.part1 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission10!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission10!.part1 = true}>Yes</button>
                     </div>
                 </div>
-            </div>
-            <div class="" id="mission12">
-                <h1 class="text-2xl font-bold">
-                    Mission 12 - Salvage Operation
-                </h1>
-                <div class="flex flex-col gap-2 border-b p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Sand is completely cleared
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission12!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission12!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part1 = true}>Yes</button>
-                    
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-3/4 p-2">
-                    <div>
-                        <p>Ship is completely raised    
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission12!.part2 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part2 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission12!.part2 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission12!.part2 = true}>Yes</button>
+
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Scale pan is completely removed</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission10!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission10!.part2 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission10!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission10!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission13">
-                <h1 class="text-2xl font-bold">
-                    Mission 13 - Statue Rebuild
-                </h1>
-                <div class="flex flex-col gap-2 p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Statue is completely raised
-                        </p>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission11">
+                <h2 class="text-xl font-bold mb-3 ">Mission 11 - Angler Artifacts</h2>
+                
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Artifacts are raised above the ground layer</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission11!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => {score.mission11!.part1 = false; score.mission11!.part2 = false} }>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission11!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission11!.part1 = true}>Yes</button>
                     </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.mission13!.part1 === false ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.mission13!.part1 = false}>No</button>
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission13!.part1 === true ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission13!.part1 = true}>Yes</button>
-                    
+                </div>
+
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Bonus: and the crane flag is at least partly lowered</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!(isEditing && score.mission11!.part1)} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:bg-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed
+                            {score.mission11!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission11!.part2 = false}>No</button>
+                        <button disabled={!(isEditing && score.mission11!.part1)} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:bg-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed
+                            {score.mission11!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission11!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission14">
-                <h1 class="text-2xl font-bold">
-                    Mission 14 - Forum
-                </h1>
-                <div class="flex flex-col gap-2  p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Artifacts touching the mat and at least partly in the forum
-                        </p>
-                        <p class="italic">(Artifacts: Brush, Topsoil, Precious Artifact, Opposing Team’s Minecart, Ore with Fossilized Artifact, Millstone, & Scale Pan)</p>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission12">
+                <h2 class="text-xl font-bold mb-3 ">Mission 12 - Salvage Operation</h2>
+                
+                <div class="pb-3 border-b border-slate-700 mb-3">
+                    <p class="text-slate-300 mb-2">Sand is completely cleared</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission12!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission12!.part1 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission12!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission12!.part1 = true}>Yes</button>
                     </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        {#each [0, 1, 2, 3, 4, 5, 6, 7] as i}
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission14!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission14!.part1 = i}>{i}</button>
-                        {/each}
+                </div>
+
+                <div class="pt-3">
+                    <p class="text-slate-300 mb-2">Ship is completely raised</p>
+                    <div class="flex justify-start gap-4">
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-red-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission12!.part2 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission12!.part2 = false}>No</button>
+                        <button disabled={!isEditing} 
+                            class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission12!.part2 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission12!.part2 = true}>Yes</button>
                     </div>
                 </div>
             </div>
-            <div class="" id="mission15">
-                <h1 class="text-2xl font-bold">
-                    Mission 15 - Site Marking
-                </h1>
-                <div class="flex flex-col gap-2  p-2 border-slate-700 w-3/4">
-                    <div>
-                        <p>Sites with a flag at least partly inside and touching the mat
-                        </p>
-                    </div>
-                    <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
-                        {#each [0, 1, 2, 3] as i}
-                        <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.mission15!.part1 === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.mission15!.part1 = i}>{i}</button>
-                        {/each}
-                    </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission13">
+                <h2 class="text-xl font-bold mb-3 ">Mission 13 - Statue Rebuild</h2>
+                <p class="text-slate-300 mb-2">Statue is completely raised</p>
+                <div class="flex justify-start gap-4">
+                    <button disabled={!isEditing} 
+                        class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                        bg-gray-700 hover:bg-red-600 hover:
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        {score.mission13!.part1 === false ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                        on:click={() => score.mission13!.part1 = false}>No</button>
+                    <button disabled={!isEditing} 
+                        class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                        bg-gray-700 hover:bg-green-600 hover:
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        {score.mission13!.part1 === true ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                        on:click={() => score.mission13!.part1 = true}>Yes</button>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission14">
+                <h2 class="text-xl font-bold mb-3 ">Mission 14 - Forum</h2>
+                <p class="text-slate-300 mb-2">Artifacts touching the mat and at least partly in the forum (Count: 0-7)</p>
+                <p class="italic text-sm text-slate-400 mb-3">(Artifacts: Brush, Topsoil, Precious Artifact, Opposing Team’s Minecart, Ore with Fossilized Artifact, Millstone, & Scale Pan)</p>
+                <div class="flex justify-start gap-2 flex-wrap">
+                    {#each [0, 1, 2, 3, 4, 5, 6, 7] as i}
+                        <button disabled={!isEditing} 
+                            class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission14!.part1 === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission14!.part1 = i}>
+                            {i}
+                        </button>
+                    {/each}
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-800 border border-slate-700 rounded-xl shadow-lg" id="mission15">
+                <h2 class="text-xl font-bold mb-3 ">Mission 15 - Site Marking</h2>
+                <p class="text-slate-300 mb-2">Sites with a flag at least partly inside and touching the mat (Count: 0-3)</p>
+                <div class="flex justify-start gap-2">
+                    {#each [0, 1, 2, 3] as i}
+                        <button disabled={!isEditing} 
+                            class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                            bg-gray-700 hover:bg-green-600 hover:
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            {score.mission15!.part1 === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                            on:click={() => score.mission15!.part1 = i}>
+                            {i}
+                        </button>
+                    {/each}
                 </div>
             </div>
         </div>
     </div>
-    <div class="w-3/4 h-fit p-[2%] flex flex-col bg-slate-800 mt-4 justify-center items-center border rounded-2xl" id="precision_tokens">
-        <h1 class="text-2xl font-bold">
+    
+    <div class="w-full md:w-3/4 max-w-lg p-4 flex flex-col bg-slate-800 justify-center items-center border border-slate-700 rounded-xl shadow-lg mt-4" id="precision_tokens">
+        <h2 class="text-xl font-bold  mb-2">
             Precision Tokens
-        </h1>
-        <div>
-            <p>Number of precision tokens remaining
-            </p>
-        </div>
-        <div class="flex flex-row pt-4 justify-center items-center gap-2 w-fit ml-[4%]">
+        </h2>
+        <p class="text-center text-slate-300 mb-4">
+            Number of precision tokens remaining (Count: 0-6)
+        </p>
+        <div class="flex flex-row justify-center items-center gap-2 flex-wrap">
             {#each [0, 1, 2, 3, 4, 5, 6] as i}
-            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.precision_tokens === i ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.precision_tokens = i}>{i}</button>
+                <button disabled={!isEditing} 
+                    class="w-10 h-10 rounded-lg text-md font-semibold transition-colors 
+                    bg-gray-700 hover:bg-green-600 hover:
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    {score.precision_tokens === i ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                    on:click={() => score.precision_tokens = i}>
+                    {i}
+                </button>
             {/each}
         </div>
     </div>
-    <div class="w-3/4 h-fit {isEditing ? "" : "hidden"} p-[2%] flex flex-col bg-slate-800 mt-4 justify-center items-center border rounded-2xl" id="gracious_professionalism">
-        <h1 class="text-2xl font-bold">
+
+    <div class="w-full md:w-3/4 max-w-lg p-4 flex flex-col bg-slate-800 justify-center items-center border border-slate-700 rounded-xl shadow-lg mt-4 {isEditing ? "" : "hidden"}" id="gracious_professionalism">
+        <h2 class="text-xl font-bold  mb-2">
             Gracious Professionalism
-        </h1>
-        <div>
-            <p>The robot and all equipment fit completely in one launch area and under the height limit
-            </p>
-        </div>
-        <div class="flex flex-row pt-4 justify-center items-center gap-2">
-            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-red-500 hover:text-white" : ""} {score.gracious_professionalism === 2 ? "bg-red-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 2}>Developing</button>
-            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 hover:bg-orange-500 hover:text-white {score.gracious_professionalism === 3 ? "bg-orange-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 3}>Accomplished</button>
-            <button disabled={!isEditing} class="px-4 py-2 rounded-lg text-md font-semibold bg-gray-700 {isEditing ? "hover:bg-green-500 hover:text-white" : ""} {score.gracious_professionalism === 4 ? "bg-green-500 text-white" : ""} transition-colors" on:click={() => score.gracious_professionalism = 4}>Exceeds</button>
+        </h2>
+        <p class="text-center text-slate-300 mb-4">
+            Team's demonstrated level of Gracious Professionalism
+        </p>
+        <div class="flex flex-row justify-center items-center gap-4">
+            <button disabled={!isEditing} 
+                class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                bg-gray-700 hover:bg-red-600 hover:
+                disabled:opacity-50 disabled:cursor-not-allowed
+                {score.gracious_professionalism === 2 ? 'bg-red-600  shadow-inner' : 'text-slate-200'}" 
+                on:click={() => score.gracious_professionalism = 2}>
+                Developing
+            </button>
+            <button disabled={!isEditing} 
+                class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                bg-gray-700 hover:bg-orange-600 hover: 
+                disabled:opacity-50 disabled:cursor-not-allowed
+                {score.gracious_professionalism === 3 ? 'bg-orange-600  shadow-inner' : 'text-slate-200'}" 
+                on:click={() => score.gracious_professionalism = 3}>
+                Accomplished
+            </button>
+            <button disabled={!isEditing} 
+                class="px-4 py-2 rounded-lg text-md font-semibold transition-colors 
+                bg-gray-700 hover:bg-green-600 hover:
+                disabled:opacity-50 disabled:cursor-not-allowed
+                {score.gracious_professionalism === 4 ? 'bg-green-600  shadow-inner' : 'text-slate-200'}" 
+                on:click={() => score.gracious_professionalism = 4}>
+                Exceeds
+            </button>
         </div>
     </div>
-    <AsyncButton text="Save Score" classContent="mt-2 {isEditing ? "" : "hidden"}" onClick={saveScore}></AsyncButton>
+
+    <AsyncButton text="Save Score" 
+        classContent="mt-6 w-full md:w-1/2 max-w-2xs {isEditing ? "" : "hidden"} 
+        bg-indigo-600 hover:bg-indigo-700  
+        py-3 rounded-xl text-lg font-bold shadow-2xl" 
+        onClick={saveScore}>
+    </AsyncButton>
 </div>

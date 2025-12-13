@@ -1,24 +1,67 @@
 <script lang="ts">
-    export let type: "text" | "password" | "number" = "text";
-    export let width="w-[75%]";
-    export let height="h-8";
-    export let name="";
-    export let labelbg = "";
-    export let value = "";
-    let isfocused=false;
-    export let size = "";
-    export let mt = "mt-[6%]"
-    export let disabled = false;
+	export let type: 'text' | 'password' | 'number' = 'text';
+	export let name = '';
+	export let value = '';
+	export let disabled = false;
+	export let labelbg = 'bg-black';
+
+	// make a safe id (spaces break label-for behavior)
+	const id = name.replace(/\s+/g, '-').toLowerCase();
 </script>
 
-{#if value && !isfocused}
-<div class=" h-fit self-center flex {mt} {width} {size} relative">
-    <input {disabled} {...{type}} class="rounded-xl self-center bg-transparent border {height} w-full focus peer pl-2" id={name} bind:value on:focusout={() => isfocused=false}>
-    <label for={name} id="{name}-label" class=" pl-2 pr-2 rounded-md absolute ml-2 mt-1 cursor-text transform transition-transform {labelbg} -translate-y-[1.125rem] text-md">{name}</label> 
+<div class="relative w-full">
+	<input
+		id={id}
+		{type}
+		{disabled}
+		bind:value
+		placeholder=" "
+		class="
+			peer
+			w-full
+			h-11
+			bg-transparent
+			border
+			border-green-500/50
+			rounded-xl
+			pl-3
+			pr-3
+			text-green-300
+			outline-none
+			transition
+			duration-200
+			focus:border-green-400
+			focus:shadow-[0_0_10px_rgba(34,197,94,0.4)]
+		"
+	/>
+
+	<label
+		for={id}
+		class="
+			absolute
+			left-3
+			top-1/2
+			-translate-y-1/2
+			px-1
+			text-sm
+			text-green-400/80
+			cursor-text
+			transition-all
+			duration-200
+			{labelbg}
+
+			/* float when focused OR has content */
+			peer-focus:-top-2
+			peer-focus:text-xs
+			peer-focus:text-green-300
+			peer-focus:translate-y-0
+
+			peer-not-placeholder-shown:-top-2
+			peer-not-placeholder-shown:text-xs
+			peer-not-placeholder-shown:text-green-300
+			peer-not-placeholder-shown:translate-y-0
+		"
+	>
+		{name}
+	</label>
 </div>
-{:else}
-<div class=" h-fit self-center flex {mt} {width} {size} relative">
-    <input {disabled} {...{type}} class="rounded-xl self-center bg-transparent border {height} w-full focus peer pl-2" id={name} bind:value on:focusin={() => isfocused=true} on:focusout={() => isfocused=false}>
-    <label for={name} id="{name}-label" class=" pl-2 pr-2 rounded-md absolute ml-2 mt-1 cursor-text transform transition-all {labelbg} peer-focus:-translate-y-[1.125rem] peer-focus:text-md">{name}</label> 
-</div>
-{/if}

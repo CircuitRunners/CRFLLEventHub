@@ -1,149 +1,153 @@
-<script lang='ts'>
+<script lang="ts">
 	import ScoreBreakdown from '$lib/components/ScoreBreakdown.svelte';
-	import { blankScore, type Score } from '$lib';
-	import { getMatch, getTeamByNumber } from '$lib/db.js';
-	import { onMount } from 'svelte';
+	import { blankScore } from '$lib';
 	import Button from '$lib/components/Button.svelte';
-    // import { Score } from "$lib";
-    let {data} = $props()
-    // console.log(data)
-   
-    let teamname = data.teamName;
-    let teamnum = data.teamNum;
-    let event = data.live_event;
-    let matches = data.matches;
-    // console.log(matches)
-    let allScores = data.scores
-    let admin = data.admin;
-    // console.log(allScores)
 
-    let teamGames = []; // [round number, table number, match id]
-    let i = 0;
-    if (matches == null) {
-        console.log("No matches found");
-    }
-    else{
-        
-        for (let m of (matches as any))  {
-            i += 1;
-            if (m.table1.team == teamnum) {               
-    
-                teamGames.push([i, 1, m.id])
-            }
-            else if (m.table2.team == teamnum) {
-                teamGames.push([i, 2, m.id])
-                }       
-            else if (m.table3.team == teamnum) {
-                teamGames.push([i, 3, m.id])
-                }      
-            else if (m.table4.team == teamnum) {
-                teamGames.push([i, 4, m.id])
-                }      
-            else if (m.table5.team == teamnum) {
-                teamGames.push([i, 5, m.id])
-                }   
-            else if (m.table6.team == teamnum) {
-                teamGames.push([i, 6, m.id])
+	let { data } = $props();
 
-            }          
-        }
-        // console.log(teamGames);
-    }
+	let teamname = data.teamName;
+	let teamnum = data.teamNum;
+	let event = data.live_event;
+	let matches = data.matches;
+	let allScores = data.scores;
+	let admin = data.admin;
 
-    
-    function getTeamScores(teamGames: any[], allScores: any[]) {
-        return teamGames.map(([round, table, matchId]) => {
-            const score = allScores.find(
-                s => s.table === table && s.match_id === matchId
-            );
+	let teamGames = [];
+	let i = 0;
 
-            return {
-                round,
-                table,
-                matchId,
-                score: score ?? null
-        };
-    });
-}   
+	if (matches) {
+		for (let m of matches as any[]) {
+			i += 1;
+			for (let t = 1; t <= 6; t++) {
+				if (m[`table${t}`]?.team === teamnum) {
+					teamGames.push([i, t, m.id]);
+				}
+			}
+		}
+	}
 
-    
-    const teamScores = getTeamScores(teamGames, allScores!);
-    // console.log(teamScores);
-    const onlyTotals = teamScores.map((x) => {
-        if (x.score) {
-            return x.score.total;
-        } else {
-            return 0
-        }
-    });
+	function getTeamScores(teamGames: any[], allScores: any[]) {
+		return teamGames.map(([round, table, matchId]) => {
+			const score = allScores.find(
+				(s) => s.table === table && s.match_id === matchId
+			);
+			return { round, table, matchId, score: score ?? null };
+		});
+	}
 
-    let matchIds = teamGames.map((x) => x[2]);
-    let tableIds = teamGames.map((x) => x[1]);
-    // console.log("Match Ids:");
-    // console.log(matchIds);
-    // let scoresForTeamMatches = allScores!.filter((score) => matchIds.includes(score.match_id) && tableIds.includes(score.table));
-    // console.log("Scores for Team Matches:");
-    // console.log(scoresForTeamMatches);
-    // console.log("Table Ids:");
-    // console.log(tableIds);
-    let selectedScore = $state(blankScore)
-    let scoreBreakdownDisplay = $state(false)
-    let teamSelectPopup = $state(false)
-    let teamNumbers = event.team_numbers;
-    // teamNumbers.push(-1);
+	const teamScores = getTeamScores(teamGames, allScores ?? []);
+
+	let selectedScore = $state(blankScore);
+	let scoreBreakdownDisplay = $state(false);
+	let teamSelectPopup = $state(false);
+	let teamNumbers = event.team_numbers;
 </script>
-<div class="w-full px-[10%] flex flex-col items-center h-fit overflow-visible relative bg-black">
-    <div class="w-full h-fit flex flex-col items-center {scoreBreakdownDisplay ? "blur-md" : "blur-0"}">
-        <h2 class="text-center text-3xl font-bold">
-            Hello {teamname}! <br> Team {teamnum} 
-        </h2>
-        <p class="text-center text-2xl font-bold mt-4">
-            Event {event.season} | {event.type}  <br> {admin ? "Team View Mode" : ""}
-        </p>
-        {#if admin}
-            <Button text="Select a Team" classContent="mt-2" onClick={() => {teamSelectPopup = true}}></Button>
-            <div class="absolute top-1/8 right-1/8 px-[10%] border rounded-2xl grid grid-cols-6 grid-rows-4 bg-slate-700 w-3/4 h-full mt-2 mr-2 {teamSelectPopup ? "" : "hidden"}">
-                {#if teamnum != -1}
-                    <form action="/view" method="POST">
-                        <input type="hidden" name="team" value={-1}>
-                        <button type="submit" class="flex justify-center items-center w-fit p-2 border rounded-md hover:cursor-pointer hover:bg-slate-500 hover:text-green-300">
-                            <h1 class="text-center text-xl font-bold">Admin</h1>
-                        </button>
-                    </form>
-                {:else}
-                    {#each teamNumbers as team}
-                        <form action="/view" method="POST">
-                            <input type="hidden" name="team" value={team}>
-                            <button type="submit" class="flex justify-center items-center w-fit p-2 border rounded-md hover:cursor-pointer hover:bg-slate-500 hover:text-green-300">
-                                <h1 class="text-center text-xl font-bold">{team}</h1>
-                            </button>
-                        </form>
-                    {/each}
-                {/if}
+
+<!-- PAGE WRAPPER -->
+<div class="min-h-screen bg-black text-green-300 px-4 sm:px-8 lg:px-[12%] py-8">
+
+	<!-- HEADER CARD -->
+	<div class="w-full max-w-4xl mx-auto bg-slate-800 rounded-2xl p-6 shadow-lg">
+		<h1 class="text-3xl font-bold text-center">
+			Hello {teamname}
+		</h1>
+
+		<p class="text-center text-lg mt-2 opacity-80">
+			Team {teamnum}
+		</p>
+
+		<p class="text-center text-sm mt-4">
+			Event {event.season} · {event.type}
+			{#if admin}
+				<span class="block text-green-400 font-semibold mt-1">
+					Admin View Mode
+				</span>
+			{/if}
+		</p>
+
+		{#if admin}
+			<div class="flex justify-center mt-4">
+				<Button
+					text="Select Team"
+					onClick={() => (teamSelectPopup = true)}
+				/>
+			</div>
+		{/if}
+	</div>
+
+	<!-- MATCHES -->
+	<div class="max-w-4xl mx-auto mt-10">
+		<h2 class="text-xl font-bold mb-4 text-center">
+			Your Matches
+		</h2>
+
+		{#if teamScores.length === 0}
+			<p class="text-center opacity-70">
+				No matches found.
+			</p>
+		{:else}
+			<div class="grid gap-4 sm:grid-cols-2">
+				{#each teamScores as teamScore}
+					<div
+						class="
+							bg-slate-700
+							rounded-xl
+							p-4
+							cursor-pointer
+							transition
+							hover:bg-slate-600
+							hover:scale-[1.01]
+						"
+						onclick={() => {
+							selectedScore = teamScore.score || blankScore;
+							scoreBreakdownDisplay = true;
+						}}
+					>
+						<div class="flex justify-between items-center">
+							<div>
+								<p class="font-semibold">
+									Round {teamScore.round}
+								</p>
+								<p class="text-sm opacity-80">
+									Table {teamScore.table}
+								</p>
+							</div>
+
+							<div class="text-right">
+								<p class="text-xs opacity-70">Score</p>
+								<p class="text-xl font-bold">
+									{teamScore.score?.total ?? 0}
+								</p>
+							</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{/if}
+	</div>
+
+	<!-- SCORE MODAL -->
+	{#if scoreBreakdownDisplay}
+        <div class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 flex overflow-auto justify-center px-4 py-8">
+            
+            <div class="relative max-w-3xl w-full bg-slate-900 rounded-2xl p-6 max-h-[90vh] overflow-y-auto my-auto">
+                
+                <button
+                    class="absolute top-4 right-4 text-green-300 hover:text-red-400 z-50"
+                    onclick={() => (scoreBreakdownDisplay = false)}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <ScoreBreakdown
+                    score={selectedScore}
+                    isEditing={false}
+                    match={null}
+                    team={null}
+                />
             </div>
-        {/if}
-        <h3 class="text-center text-xl font-bold mt-4">
-            Your Matches:
-        </h3>
-        {#if teamGames.length == 0}
-            <p>No matches found for the team {teamnum}.</p>
-        {:else}
-            <ul class="mt-4 flex flex-col gap-4">
-                {#each teamScores as teamScore}
-                    <!-- svelte-ignore a11y_click_events_have_key_events -->
-                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <li class=" bg-slate-700 rounded-lg border p-4 cursor-pointer hover:bg-slate-500 hover:text-bold" onclick={() => {selectedScore = teamScore.score || blankScore; scoreBreakdownDisplay=true;}}>Round {teamScore.round} - Table {teamScore.table} (Score: {teamScore.score?.total || 0})</li>
-                {/each}
-            </ul>
-        {/if}
-    </div>
-    <div class="{scoreBreakdownDisplay ? "" : "hidden"} w-[100%] absolute top-0 rounded-2xl h-fit bg-blur"> 
-        <ScoreBreakdown score={selectedScore} isEditing={false} match={null} team={null} ></ScoreBreakdown>
-        <!-- svelte-ignore a11y_consider_explicit_label -->
-        <button class="fixed top-[10%] right-[10%] z-10 cursor-pointer bg-transparent hover:text-red-600 stroke-green-200" onclick={() => scoreBreakdownDisplay = false}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
-</div>  
+        </div>
+    {/if}
+</div>
