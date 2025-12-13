@@ -21,9 +21,11 @@
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
 <div class="border rounded-lg p-4 h-fit w-full bg-slate-800 relative">
-    <AnimatedInputLabel name="Team Name" bind:value={team.name} labelbg='bg-slate-800' mt="my-4"></AnimatedInputLabel>
-    <AnimatedInputLabel type="number" name="Team Number" bind:value={team.number} labelbg='bg-slate-800' mt="my-4"></AnimatedInputLabel>
-    <AnimatedInputLabel name="Team Password" bind:value={team.password} labelbg='bg-slate-800' mt="my-4"></AnimatedInputLabel>
+    <div class="flex flex-col gap-4">
+        <AnimatedInputLabel name="Team Name" bind:value={team.name} labelbg='bg-slate-800'></AnimatedInputLabel>
+        <AnimatedInputLabel type="number" name="Team Number" bind:value={team.number} labelbg='bg-slate-800'></AnimatedInputLabel>
+        <AnimatedInputLabel name="Team Password" bind:value={team.password} labelbg='bg-slate-800'></AnimatedInputLabel>
+    </div>
     <div class="flex justify-center mt-[2%]">
         <Button text={type==="update" ? "Update Team" : "Create Team"} onClick={saveTeam} />
     </div>
