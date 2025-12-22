@@ -9,7 +9,7 @@
 	<h1 class="text-center text-3xl font-bold text-green-300">
 	Rankings
 	</h1>
-	<header class="text-center text-3xl font-bold text-red-500">ALL ORIGINAL MATCH TIMES DELAYED BY ~35 MINUTES</header>
+	<!-- <header class="text-center text-3xl font-bold text-red-500">ALL ORIGINAL MATCH TIMES DELAYED BY ~35 MINUTES</header> -->
 
 		
 	<div
