@@ -1,6 +1,6 @@
 <script lang='ts'>
     import AsyncButton from '$lib/components/AsyncButton.svelte';
-    import { addMatchToEvent, getMatch, getTeamByNumber, updateMatch } from '$lib/db.ts';
+    import { addMatchToEvent, createRankings, getMatch, getRankingsByEvent, getTeamByNumber, updateMatch, updateRankings } from '$lib/db.ts';
     import { goto } from '$app/navigation';
     import EventCard from '$lib/components/EventCard.svelte';
     import Button from '$lib/components/Button.svelte';
@@ -58,7 +58,7 @@
         return highest_score || 0;
     }
 
-    const updateRankings = async () => {
+    const fixRankings = async () => {
         let rankings = [];
         for (let teamNum of event.team_numbers) {
             let team_data = (await getTeamByNumber(teamNum))![0];
@@ -68,6 +68,17 @@
         console.log(rankings)
         event = { ...event, rankings }; 
         await updateEvent(event);
+
+        let data = await getRankingsByEvent(event.id);
+        console.log(data)
+        // console.log({event_id: event.id, rankings: rankings})
+        if (data?.length == 1) {
+            console.log("updating")
+            data = await updateRankings({event_id: event.id, rankings: rankings});
+        } else {
+            console.log("creating")
+            data = await createRankings({event_id: event.id, rankings: rankings});
+        }
     }
 </script>
 
@@ -79,7 +90,7 @@
             <p class="text-green-400 font-mono text-sm">{event.season} • {event.type}</p>
         </div>
         <div class="flex gap-3">
-            <button onclick={updateRankings} class="px-6 cursor-pointer py-3 rounded-xl bg-slate-800 border border-slate-600 text-green-400 font-bold hover:bg-slate-700 transition-all flex items-center gap-2">
+            <button onclick={fixRankings} class="px-6 cursor-pointer py-3 rounded-xl bg-slate-800 border border-slate-600 text-green-400 font-bold hover:bg-slate-700 transition-all flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
                 </svg>

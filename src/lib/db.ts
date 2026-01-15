@@ -238,3 +238,39 @@ export const deleteMatch = async (id: number) => {
     }
     return data
 }
+
+export const getRankings = async () => {
+    const { data, error } = await supabase.from('rankings').select('*')
+    if (error) {
+        console.log(error)
+        return null
+    }
+    return data
+}
+
+export const getRankingsByEvent = async (event_id: number) => {
+    const { data, error } = await supabase.from('rankings').select('*').eq('event_id', event_id)
+    if (error) {
+        console.log(error)
+        return null
+    }
+    return data
+}
+
+export const updateRankings = async (rankings: any) => {
+    const { data, error } = await supabase.from('rankings').update(rankings).eq('event_id', rankings.event_id)
+    if (error) {
+        console.log(error)
+        return null
+    }
+    return data
+}
+
+export const createRankings = async (rankings: any) => {
+    const { data, error } = await supabase.from('rankings').insert(rankings)
+    if (error) {
+        console.log(error)
+        return null
+    }
+    return data
+}

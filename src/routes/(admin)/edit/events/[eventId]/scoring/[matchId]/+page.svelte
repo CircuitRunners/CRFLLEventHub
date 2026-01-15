@@ -20,7 +20,7 @@
         <div class="group w-1/2 top-[5%] left-1/8 bg-slate-800 p-2  flex flex-row justify-between hover:bg-slate-500 hover:text-amber-500 cursor-pointer items-center border rounded-lg mb-4"
         onclick={() => {goto(`/edit/events/${event.id}/scoring/${match.id}/table${index+1}`)}}>
             <h1 class="text-2xl text-center font-bold">Table {index+ 1}</h1>
-            <AnimatedInputLabel size="cursor-pointer" name="Team" value={table.team} disabled={true} labelbg=" group-hover:bg-slate-500 bg-slate-800" mt="mt-2"/>
+            <AnimatedInputLabel name="Team" value={table.team} disabled={true} labelbg=" group-hover:bg-slate-500 bg-slate-800" mt="mt-2"/>
         </div>
     {/each}
     <div class=" flex justify-center mt-4">

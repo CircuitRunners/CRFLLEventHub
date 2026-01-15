@@ -43,6 +43,7 @@
             match[table].score = score.id;
             await updateMatch(match);
             let current_score_total = score.total || 0;
+            team.highest_score_by_event = [];
             let team_highest_score_details = team.highest_score_by_event.find((x: any) => x.event_id == match.event_id);
             console.log(team_highest_score_details)
             let team_highest_score = team_highest_score_details ? team_highest_score_details.score : null;

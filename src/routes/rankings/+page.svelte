@@ -1,8 +1,41 @@
 <script lang="ts">
-	import { getTeamByNumber } from '$lib/db.js';
+	import { getTeamByNumber, supabase } from '$lib/db.js';
 	
 	let { data } = $props();
 	let event = data.live_event;
+	let rankings = $state(event.rankings);
+	import { onMount, onDestroy } from 'svelte';
+
+	onMount(() => {
+		const channel = supabase
+			.channel('rankings-live')
+			.on(
+				'postgres_changes',
+				{
+					event: '*',
+					schema: 'public',
+					table: 'rankings'
+				},
+				async () => {
+					// Refetch updated rankings
+					const { data, error } = await supabase
+						.from('rankings')
+						.select('*')
+						// .order('highest_score', { ascending: false });
+
+					if (!error && data) {
+						rankings = (data.find((ranking: any) => ranking.event_id == event.id))?.rankings;
+						console.log(rankings)
+					}
+				}
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
+	});
+
 </script>
 
 <div class="w-full px-4 sm:px-8 lg:px-[15%] flex flex-col gap-6 items-center bg-black">
@@ -22,7 +55,7 @@
 		max-w-6xl
 	"
 	>
-	{#each event.rankings as ranking, i}
+	{#each rankings as ranking, i}
 		{#await getTeamByNumber(ranking.team)}
 				<div class="w-full h-20 bg-slate-800 rounded-2xl animate-pulse mb-4 break-inside-avoid-column"></div>
 		{:then team}

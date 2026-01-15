@@ -86,6 +86,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rankings: {
+        Row: {
+          created_at: string
+          event_id: number | null
+          id: number
+          rankings: Json | null
+        }
+        Insert: {
+          created_at?: string
+          event_id?: number | null
+          id?: number
+          rankings?: Json | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: number | null
+          id?: number
+          rankings?: Json | null
+        }
+        Relationships: []
+      }
       Score: {
         Row: {
           created_at: string
@@ -168,6 +189,7 @@ export type Database = {
         Row: {
           created_at: string
           highest_score: number | null
+          highest_score_by_event: Json | null
           id: number
           name: string | null
           number: number | null
@@ -176,6 +198,7 @@ export type Database = {
         Insert: {
           created_at?: string
           highest_score?: number | null
+          highest_score_by_event?: Json | null
           id?: number
           name?: string | null
           number?: number | null
@@ -184,6 +207,7 @@ export type Database = {
         Update: {
           created_at?: string
           highest_score?: number | null
+          highest_score_by_event?: Json | null
           id?: number
           name?: string | null
           number?: number | null
