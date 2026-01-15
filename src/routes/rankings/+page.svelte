@@ -89,7 +89,7 @@
 			High Score
 			</div>
 			<div class="text-xl font-bold text-green-300">
-			{team![0].highest_score}
+			{ranking.highest_score}
 			</div>
 		</div>
 		</div>

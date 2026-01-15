@@ -46,13 +46,26 @@
         // Toast or feedback could go here
     }
 
+    const getHighestScore = (team: any) => {
+        let highest_score = 0;
+        for (let something of team.highest_score_by_event || []) {
+            if(something.event_id == matches[0].event_id) {
+                highest_score = something.score;
+            }
+        }
+        console.log(team.number)
+        console.log(highest_score)
+        return highest_score || 0;
+    }
+
     const updateRankings = async () => {
         let rankings = [];
         for (let teamNum of event.team_numbers) {
             let team_data = (await getTeamByNumber(teamNum))![0];
-            rankings.push({team: teamNum, highest_score: (team_data.highest_score || 0)});
+            rankings.push({team: teamNum, highest_score: (getHighestScore(team_data))});
         }
         rankings.sort((a, b) => b.highest_score - a.highest_score);
+        console.log(rankings)
         event = { ...event, rankings }; 
         await updateEvent(event);
     }
