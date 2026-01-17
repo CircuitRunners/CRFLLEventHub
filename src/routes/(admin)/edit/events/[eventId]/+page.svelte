@@ -6,7 +6,6 @@
     import Button from '$lib/components/Button.svelte';
     import { createMatch, updateEvent } from '$lib/db.js';
     import { onMount } from 'svelte';
-	import { calculateHighestScore } from '$lib';
 
     let {data} = $props()
     let event: any = $state(data.event![0])
@@ -75,13 +74,13 @@ const fixRankings = async () => {
 			if (!table) continue;
             // console.log(table)
 			const { team, score: scoreId } = table;
-			if (team === -1 || scoreId == -1) continue;
+			if (team === -1 || scoreId === -1) continue;
             let score = (await getScore(scoreId) || [])[0];
 
 			const prev = highestScoreByTeam.get(team) ?? 0;
             // console.log(score.total)
 			if ((score.total || 0) > prev) {
-				highestScoreByTeam.set(team, (score.total || 0));
+				highestScoreByTeam.set(team, (score.total!));
 			}
 		}
 	}

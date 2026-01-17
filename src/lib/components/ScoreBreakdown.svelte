@@ -44,7 +44,11 @@
             score = data as unknown as Score;
             console.log(score)
             match[table].score = score.id;
-            await updateMatch(match);
+            match = await updateMatch(match);
+            if(match[table].score !== score.id) {
+                alert("match score not updated")
+                return
+            }
             alert("Score Saved")
             // let current_score_total = score.total || 0;
             // team.highest_score_by_event = [];

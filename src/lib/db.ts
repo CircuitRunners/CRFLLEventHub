@@ -214,7 +214,7 @@ export const updateMatch = async (match: any) => {
         console.log(error)
         return null
     }
-    return data
+    return (await getMatch(match.id) || [])[0]
 }
 
 export const deleteMatch = async (id: number) => {
