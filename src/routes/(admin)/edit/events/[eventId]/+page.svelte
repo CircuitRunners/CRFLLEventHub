@@ -69,6 +69,7 @@ const fixRankings = async () => {
 
 	// Single pass through all matches
 	for (const match of matches) {
+        console.log("match: " + match.id)
 		for (let i = 1; i <= 6; i++) {
 			const table = match[`table${i}`];
 			if (!table) continue;
