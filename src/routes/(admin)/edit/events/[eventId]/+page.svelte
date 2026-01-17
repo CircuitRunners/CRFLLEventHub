@@ -59,35 +59,54 @@
         return highest_score || 0;
     }
 
-    const fixRankings = async () => {
+const fixRankings = async () => {
+	// team -> highest score
+	const highestScoreByTeam = new Map<number, number>();
 
-        let rankings = [];
-        for (let teamNum of event.team_numbers) {
-            let team_highest_score_id = await calculateHighestScore(teamNum, event.id);
-            if(team_highest_score_id !== 0) {
-                let team_highest_score = ((await getScore(team_highest_score_id)) || [])[0];
-                console.log(team_highest_score)
-                rankings.push({team: teamNum, highest_score: team_highest_score.total || 0});
-            } else {
-                rankings.push({team: teamNum, highest_score: 0});
-            }
-        }
-        rankings.sort((a, b) => b.highest_score - a.highest_score);
-        console.log(rankings)
-        event = { ...event, rankings }; 
-        await updateEvent(event);
+	// Initialize teams
+	for (const teamNum of event.team_numbers) {
+		highestScoreByTeam.set(teamNum, 0);
+	}
 
-        let data = await getRankingsByEvent(event.id);
-        console.log(data)
-        // console.log({event_id: event.id, rankings: rankings})
-        if (data?.length == 1) {
-            console.log("updating")
-            data = await updateRankings({event_id: event.id, rankings: rankings});
-        } else {
-            console.log("creating")
-            data = await createRankings({event_id: event.id, rankings: rankings});
-        }
-    }
+	// Single pass through all matches
+	for (const match of matches) {
+		for (let i = 1; i <= 6; i++) {
+			const table = match[`table${i}`];
+			if (!table) continue;
+            // console.log(table)
+			const { team, score: scoreId } = table;
+			if (team === -1 || scoreId == -1) continue;
+            let score = (await getScore(scoreId) || [])[0];
+
+			const prev = highestScoreByTeam.get(team) ?? 0;
+            // console.log(score.total)
+			if ((score.total || 0) > prev) {
+				highestScoreByTeam.set(team, (score.total || 0));
+			}
+		}
+	}
+
+	// Build rankings array
+	const rankings = event.team_numbers.map((teamNum: number) => ({
+		team: teamNum,
+		highest_score: highestScoreByTeam.get(teamNum) ?? 0
+	}));
+
+	// Sort descending
+	rankings.sort((a, b) => b.highest_score - a.highest_score);
+
+	// Save to event
+	event = { ...event, rankings };
+	await updateEvent(event);
+
+	// Upsert rankings
+	const existing = await getRankingsByEvent(event.id);
+	if (existing?.length === 1) {
+		await updateRankings({ event_id: event.id, rankings });
+	} else {
+		await createRankings({ event_id: event.id, rankings });
+	}
+};
 </script>
 
 <div class="w-full max-w-5xl mx-auto min-h-screen p-4 md:p-8 flex flex-col items-center gap-8 pb-24">

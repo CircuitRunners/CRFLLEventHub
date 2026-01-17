@@ -167,7 +167,7 @@
 									{event.team_numbers.includes(team.number)
 										? 'bg-green-600 border-green-400 text-white scale-95 shadow-[0_0_15px_rgba(34,197,94,0.3)]'
 										: 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'}"
-									onclick={() => toggleTeam(team.number)}
+									onclick={() => toggleTeam(team.number || -1)}
 								>
 									{team.number}
 								</button>
