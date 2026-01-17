@@ -26,16 +26,16 @@
             let team_highest_score = team_highest_score_details ? team_highest_score_details.score : null;
             console.log("team_highest " + team_highest_score)
             console.log( "score_total " + current_score_total)
-            if(team_highest_score < current_score_total) {
-                console.log("current score higher")
-                team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
-                team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, match_id: match.id}];
-                let data = await updateTeam(team);
-            } else if (team_highest_score === null || team_highest_score_details.match_id === match.id) {
-                team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
-                team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, match_id: match.id}];
-                let data = await updateTeam(team);
-            }
+            // if(team_highest_score < current_score_total) {
+            //     console.log("current score higher")
+            //     team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
+            //     team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, score_id: score.id}];
+            //     let data = await updateTeam(team);
+            // } else if (team_highest_score === null || team_highest_score_details.match_id === match.id) {
+            //     team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
+            //     team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, score_id: score.id}];
+            //     let data = await updateTeam(team);
+            // }
         } else {
             console.log("creating")
             let data = await createScore(score);
@@ -47,15 +47,15 @@
             let team_highest_score_details = team.highest_score_by_event.find((x: any) => x.event_id == match.event_id);
             console.log(team_highest_score_details)
             let team_highest_score = team_highest_score_details ? team_highest_score_details.score : null;
-            if(team_highest_score < current_score_total) {
-                team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
-                team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, match_id: match.id}];
-                let data = await updateTeam(team);
-            } else if (team_highest_score === null) {
-                team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
-                team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, match_id: match.id}];
-                let data = await updateTeam(team);
-            }
+            // if(team_highest_score < current_score_total) {
+            //     team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
+            //     team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, score_id: score.id}];
+            //     let data = await updateTeam(team);
+            // } else if (team_highest_score === null) {
+            //     team.highest_score_by_event = team.highest_score_by_event.filter((x: any) => x != team_highest_score_details)
+            //     team.highest_score_by_event = [...team.highest_score_by_event, {event_id: match.event_id, score: current_score_total, score_id: score.id}];
+            //     let data = await updateTeam(team);
+            // }
         }
     };
 

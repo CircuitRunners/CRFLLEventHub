@@ -1,11 +1,12 @@
 <script lang='ts'>
     import AsyncButton from '$lib/components/AsyncButton.svelte';
-    import { addMatchToEvent, createRankings, getMatch, getRankingsByEvent, getTeamByNumber, updateMatch, updateRankings } from '$lib/db.ts';
+    import { addMatchToEvent, createRankings, getMatch, getRankingsByEvent, getScore, getTeamByNumber, updateMatch, updateRankings } from '$lib/db.ts';
     import { goto } from '$app/navigation';
     import EventCard from '$lib/components/EventCard.svelte';
     import Button from '$lib/components/Button.svelte';
     import { createMatch, updateEvent } from '$lib/db.js';
     import { onMount } from 'svelte';
+	import { calculateHighestScore } from '$lib';
 
     let {data} = $props()
     let event: any = $state(data.event![0])
@@ -59,10 +60,17 @@
     }
 
     const fixRankings = async () => {
+
         let rankings = [];
         for (let teamNum of event.team_numbers) {
-            let team_data = (await getTeamByNumber(teamNum))![0];
-            rankings.push({team: teamNum, highest_score: (getHighestScore(team_data))});
+            let team_highest_score_id = await calculateHighestScore(teamNum, event.id);
+            if(team_highest_score_id !== 0) {
+                let team_highest_score = ((await getScore(team_highest_score_id)) || [])[0];
+                console.log(team_highest_score)
+                rankings.push({team: teamNum, highest_score: team_highest_score.total || 0});
+            } else {
+                rankings.push({team: teamNum, highest_score: 0});
+            }
         }
         rankings.sort((a, b) => b.highest_score - a.highest_score);
         console.log(rankings)

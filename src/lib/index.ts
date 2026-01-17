@@ -1,5 +1,7 @@
 // place files you want to import through the `$lib` alias in this folder.
 
+import { getEvent, getMatch, getScore } from "./db";
+
 
 export type Team = {
     name: string,
@@ -152,4 +154,67 @@ export type Event = {
     team_ids: number[],
     schedule_id: number,
     rankings_ids: number[],
+}
+
+export const calculateHighestScore = async(team_number: number, eventId: number) => {
+    console.log(team_number)
+    const event = (await getEvent(eventId))![0] as unknown as any;
+    console.log(event)
+    let highestScore = 0;
+    let highestScoreId = 0;
+    for (let matchId of event.schedule.matches) {
+        let match = (await getMatch(matchId))![0] as unknown as any;
+        console.log(match)
+        let table1_team = match.table1!.team;
+        let table2_team = match.table2!.team;
+        let table3_team = match.table3!.team;
+        let table4_team = match.table4!.team;
+        let table5_team = match.table5!.team;
+        let table6_team = match.table6!.team;
+        if(table1_team == team_number) {
+            let score = (await getScore(match.table1.score))![0] as unknown as any;
+            if(score && score.total > highestScore) {
+                highestScore = score.total;
+                highestScoreId = score.id;
+            }
+        }
+        if(table2_team == team_number) {
+            let score = (await getScore(match.table2.score))![0] as unknown as any;
+            if(score && score.total > highestScore) {
+                highestScore = score.total;
+                highestScoreId = score.id;
+            }
+        }
+        if(table3_team == team_number) {
+            let score = (await getScore(match.table3.score))![0] as unknown as any;
+            if(score && score.total > highestScore) {
+                highestScore = score.total;
+                highestScoreId = score.id;
+            }
+        }
+        if(table4_team == team_number) {
+            let score = (await getScore(match.table4.score))![0] as unknown as any;
+            if(score && score.total > highestScore) {
+                highestScore = score.total;
+                highestScoreId = score.id;
+            }
+        }
+        if(table5_team == team_number) {
+            let score = (await getScore(match.table5.score))![0] as unknown as any;
+            if(score && score.total > highestScore) {
+                highestScore = score.total;
+                highestScoreId = score.id;
+            }
+        }
+        if(table6_team == team_number) {
+            let score = (await getScore(match.table6.score))![0] as unknown as any;
+            if(score && score.total > highestScore) {
+                highestScore = score.total;
+                highestScoreId = score.id;
+            }
+        }
+    }
+    console.log(highestScore)
+    console.log(highestScoreId)
+    return highestScoreId;
 }
