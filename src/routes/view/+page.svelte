@@ -44,6 +44,7 @@
     let scoreBreakdownDisplay = $state(false);
     let teamSelectPopup = $state(false);
     let teamNumbers = event.team_numbers;
+    console.log(teamScores)
     
     // Function to handle the form submission and close the modal
     // Note: Since this form submission will reload the page with new data,

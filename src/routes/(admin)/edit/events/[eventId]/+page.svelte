@@ -74,7 +74,10 @@ const fixRankings = async () => {
 			if (!table) continue;
             // console.log(table)
 			const { team, score: scoreId } = table;
-			if (team === -1 || scoreId === -1) continue;
+			if (team === -1 || scoreId === -1) {
+                console.log(team, scoreId)
+                continue;
+            };
             let score = (await getScore(scoreId) || [])[0];
 
 			const prev = highestScoreByTeam.get(team) ?? 0;
@@ -105,6 +108,7 @@ const fixRankings = async () => {
 	} else {
 		await createRankings({ event_id: event.id, rankings });
 	}
+    alert("Updated Rankings")
 };
 </script>
 
@@ -199,6 +203,7 @@ const fixRankings = async () => {
 
                     <div class="space-y-6">
                         <div class="flex flex-col gap-2">
+                            <!-- svelte-ignore a11y_label_has_associated_control -->
                             <label class="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Scheduled Time</label>
                             <input type="time" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 text-white text-xl font-bold focus:border-green-500 outline-none transition-all w-full" bind:value={newMatch.time}>
                         </div>
@@ -207,6 +212,7 @@ const fixRankings = async () => {
                             {#each [1, 2, 3, 4, 5, 6] as tableNum}
                                 {@const tableName = `table${tableNum}`}
                                 <div class="flex flex-col gap-2">
+                                    <!-- svelte-ignore a11y_label_has_associated_control -->
                                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Table {tableNum}</label>
                                     <select 
                                         class="bg-slate-800 border border-slate-700 rounded-xl p-3 text-white font-bold focus:border-green-500 outline-none w-full"
