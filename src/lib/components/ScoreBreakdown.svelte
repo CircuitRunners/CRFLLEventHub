@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Score } from "$lib";
-	import { createScore, updateMatch, updateScore, updateTeam } from "$lib/db";
+	import { createScore, getMatch, updateMatch, updateScore, updateTeam } from "$lib/db";
 	import { blankScore } from "$lib/index";
 	import AsyncButton from "./AsyncButton.svelte";
 	import Button from "./Button.svelte";
@@ -43,6 +43,7 @@
             let data = await createScore(score);
             score = data as unknown as Score;
             console.log(score)
+            match = (await getMatch(match.id) || [])[0];
             match[table].score = score.id;
             match = await updateMatch(match);
             if(match[table].score !== score.id) {

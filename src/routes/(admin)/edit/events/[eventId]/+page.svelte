@@ -75,7 +75,7 @@ const fixRankings = async () => {
             // console.log(table)
 			const { team, score: scoreId } = table;
 			if (team === -1 || scoreId === -1) {
-                console.log(match, team, scoreId)
+                console.log(match.id, team, scoreId)
                 continue;
             };
             let score = (await getScore(scoreId) || [])[0];
