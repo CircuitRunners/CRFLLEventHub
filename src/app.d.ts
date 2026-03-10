@@ -4,16 +4,23 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user?: {
+			user?: { 
 				id: string;
 				name: string;
 				team_number: number;
-				admin: boolean;
-			};
+				admin: boolean
+			 }
 		}
+
+		interface Platform {
+			env: Env;
+			ctx: ExecutionContext;
+			caches: CacheStorage;
+			cf?: IncomingRequestCfProperties
+		}
+
 		// interface PageData {}
 		// interface PageState {}
-		// interface Platform {}
 	}
 }
 
